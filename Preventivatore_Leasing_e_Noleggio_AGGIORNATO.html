@@ -1,0 +1,2372 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  COME AGGIORNARE I TASSI IRS ED EURIBOR IN QUESTO FILE
+  ============================================================
+  1. Apri questo file con un editor di testo semplice
+     (Blocco Note su Windows, TextEdit in modalità "Testo
+     semplice" su Mac). NON usare Word, Pages o Google Docs.
+  2. Cerca (Ctrl+F / Cmd+F) il testo:  note-irs-5
+     Ti porterà dritto alla sezione "Foglio NOTE", dove ogni
+     valore da cambiare è preceduto da un commento che inizia
+     con le parole "CAMBIA QUI", per essere facile da trovare.
+  3. Cambia solo i numeri dentro value="...", usando il PUNTO
+     come separatore decimale (es. 2.95, non 2,95).
+  4. Salva il file (restando in formato .html) e ricaricalo
+     dove il calcolatore è pubblicato.
+  ============================================================
+-->
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="theme-color" content="#0e2a21">
+<meta name="color-scheme" content="light">
+<title>Preventivatore Dealer · Leasing Finanziario &amp; Locazione Operativa</title>
+<meta name="version-info" content="2026-06-29 13:00">
+<meta name="github-raw-url" content="https://raw.githubusercontent.com/TUONOME/REPO/main/Preventivatore_Leasing_e_Noleggio.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: light;
+    --pine-950:#0e2a21;
+    --pine-800:#163b2e;
+    --pine-700:#1f4d3c;
+    --pine-100:#e7efe8;
+    --paper:#f6f7f2;
+    --card:#ffffff;
+    --amber-600:#c8871f;
+    --amber-500:#d99a2b;
+    --amber-100:#fbedd3;
+    --ink:#1c2420;
+    --ink-soft:#5b6a61;
+    --line:#dde3da;
+    --danger:#a83232;
+    --danger-bg:#fbeaea;
+    --radius:14px;
+    --shadow: 0 1px 2px rgba(14,42,33,.04), 0 8px 24px -12px rgba(14,42,33,.18);
+  }
+
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--paper);
+    background-image:
+      radial-gradient(circle at 100% 0%, rgba(31,77,60,.06), transparent 45%),
+      radial-gradient(circle at 0% 100%, rgba(216,153,43,.07), transparent 40%);
+    color:var(--ink);
+    font-family:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+  *{ -webkit-tap-highlight-color: transparent; }
+  a{color:inherit;}
+  ::selection{background:var(--amber-100);}
+  .num{font-family:'IBM Plex Mono', monospace; font-variant-numeric:tabular-nums;}
+
+  /* ---------- Header ---------- */
+  header.top{
+    padding:28px 20px 18px;
+    max-width:1120px;
+    margin:0 auto;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .brand svg{flex:none;}
+  .brand-text .eyebrow{
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--amber-600);
+    font-weight:600;
+  }
+  h1{
+    font-family:'Fraunces', serif;
+    font-optical-sizing:auto;
+    font-weight:600;
+    font-size:clamp(23px, 3.4vw, 32px);
+    margin:2px 0 0;
+    color:var(--pine-950);
+    letter-spacing:-0.01em;
+  }
+  .subtitle{
+    margin:10px 0 0;
+    color:var(--ink-soft);
+    font-size:14.5px;
+    max-width:60ch;
+  }
+  .rate-note{
+    margin-top:10px;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:12px;
+    color:var(--pine-700);
+    background:var(--pine-100);
+    border:1px solid #cfe0d4;
+    padding:5px 10px;
+    border-radius:999px;
+  }
+  .rate-note .dot{
+    width:6px;height:6px;border-radius:50%;background:#3a8a63;
+    box-shadow:0 0 0 3px rgba(58,138,99,.18);
+  }
+
+  /* ---------- Mode switch ---------- */
+  .mode-switch{
+    max-width:1120px;
+    margin:18px auto 0;
+    padding:0 20px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+  @media (max-width:560px){
+    .mode-switch{grid-template-columns:1fr;}
+  }
+  .mode-card{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    text-align:left;
+    background:var(--card);
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    padding:14px 16px;
+    cursor:pointer;
+    transition:border-color .15s ease, box-shadow .15s ease, background .15s ease;
+    font-family:'Inter', sans-serif;
+  }
+  .mode-card:hover{border-color:#b9c6bd;}
+  .mode-card .ic{
+    flex:none;
+    width:38px; height:38px;
+    border-radius:9px;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--pine-100);
+    color:var(--pine-700);
+  }
+  .mode-card .tx{min-width:0;}
+  .mode-card .tt{
+    font-weight:700; font-size:14.5px; color:var(--ink);
+  }
+  .mode-card .dd{
+    font-size:12px; color:var(--ink-soft); margin-top:1px;
+  }
+  .mode-card.active{
+    border-color:var(--pine-700);
+    background:var(--pine-800);
+    box-shadow:0 8px 20px -10px rgba(14,42,33,.45);
+  }
+  .mode-card.active .ic{background:rgba(217,154,43,.2); color:var(--amber-500);}
+  .mode-card.active .tt{color:#fff;}
+  .mode-card.active .dd{color:#c7d8cd;}
+
+  /* ---------- Layout ---------- */
+  main{
+    max-width:1120px;
+    margin:0 auto;
+    padding:20px 20px 60px;
+  }
+  .mode-panel{display:none;}
+  .mode-panel.active{
+    display:block;
+  }
+  @media (max-width: 880px){
+    .mode-panel.active{padding-bottom:150px;}
+  }
+
+  .two-col-grid{
+    display:grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap:24px;
+    align-items:start;
+  }
+  .two-col-grid > *{ min-width:0; }
+  @media (max-width: 880px){
+    .two-col-grid{grid-template-columns:1fr;}
+  }
+
+  /* Su mobile i campi non devono mai avere font-size sotto i 16px:
+     sotto quella soglia Safari/iOS esegue uno zoom automatico della pagina
+     ad ogni focus, rendendo l'esperienza d'uso confusa e scattosa. */
+  @media (max-width: 640px){
+    input[type=number], input[type=text], select{
+      font-size:16px !important;
+    }
+    .prefix-input--lg input{
+      font-size:20px !important;
+    }
+    .toggle-group button, .chip-btn{
+      min-height:44px;
+    }
+  }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+  }
+
+  /* ---------- Form ---------- */
+  .form-card{padding:26px 26px 22px;}
+  .section-label{
+    font-family:'Fraunces', serif;
+    font-size:12px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--pine-700);
+    font-weight:600;
+    margin:0 0 16px;
+    padding-bottom:10px;
+    border-bottom:1px solid var(--line);
+  }
+  .section-label:not(:first-child){margin-top:26px;}
+
+  .field-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px 14px;
+  }
+  @media (max-width: 640px){
+    .field-grid{ grid-template-columns:1fr; }
+  }
+  .field{display:flex; flex-direction:column; gap:6px;}
+  .field.full{grid-column:1 / -1;}
+  .field label{
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--ink);
+  }
+  .field label.lg{font-size:13.5px;}
+  .field .hint{
+    font-size:11.5px;
+    color:var(--ink-soft);
+    margin-top:-2px;
+  }
+
+  input[type=number], input[type=text], select{
+    width:100%;
+    font-family:'Inter', sans-serif;
+    font-size:15px;
+    font-weight:500;
+    color:var(--ink) !important;
+    -webkit-text-fill-color:var(--ink);
+    background:#fbfbf9;
+    border:1.5px solid var(--line);
+    border-radius:9px;
+    padding:11px 12px;
+    transition:border-color .15s ease, box-shadow .15s ease, background .15s ease;
+    appearance:none;
+  }
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus{
+    -webkit-text-fill-color:var(--ink) !important;
+    -webkit-box-shadow:0 0 0 1000px #fbfbf9 inset !important;
+    caret-color:var(--ink);
+  }
+  select{
+    background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235b6a61' stroke-width='2'%3e%3cpath d='M6 9l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat:no-repeat;
+    background-position:right 10px center;
+    background-size:18px;
+    padding-right:34px;
+  }
+  input:focus, select:focus{
+    outline:none;
+    border-color:var(--pine-700);
+    background:#fff;
+    box-shadow:0 0 0 3px rgba(31,77,60,.13);
+  }
+  input[disabled], select[disabled]{
+    opacity:.45;
+    cursor:not-allowed;
+    background:#f1f1ee;
+  }
+  .prefix-input{position:relative;}
+  .prefix-input span{
+    position:absolute; left:12px; top:50%; transform:translateY(-50%);
+    font-size:14px; color:var(--ink-soft); font-weight:600; pointer-events:none;
+  }
+  .prefix-input input{padding-left:28px;}
+
+  .prefix-input--lg span{
+    left:16px;
+    font-size:20px;
+    color:var(--pine-700);
+  }
+  .prefix-input--lg input{
+    padding-left:38px;
+    padding-top:16px;
+    padding-bottom:16px;
+    font-size:22px;
+    font-weight:700;
+    border-width:2px;
+    border-radius:11px;
+    letter-spacing:.01em;
+  }
+  .prefix-input--lg input:focus{
+    box-shadow:0 0 0 4px rgba(31,77,60,.15);
+  }
+  .suffix-input{position:relative;}
+  .suffix-input span{
+    position:absolute; right:12px; top:50%; transform:translateY(-50%);
+    font-size:14px; color:var(--ink-soft); font-weight:600; pointer-events:none;
+  }
+  .suffix-input input{padding-right:32px;}
+
+  .toggle-group{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+  .toggle-group button{
+    font-family:'Inter', sans-serif;
+    font-size:13.5px;
+    font-weight:600;
+    padding:11px 8px;
+    border-radius:9px;
+    border:1.5px solid var(--line);
+    background:#fbfbf9;
+    color:var(--ink-soft);
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .toggle-group button:hover{border-color:#b9c6bd;}
+  .toggle-group button.active{
+    background:var(--pine-800);
+    border-color:var(--pine-800);
+    color:#fff;
+  }
+
+  .chip-row{
+    display:flex; flex-wrap:wrap; gap:8px;
+  }
+  .chip-btn{
+    flex:1 1 auto;
+    min-width:74px;
+    font-family:'Inter', sans-serif;
+    font-size:13.5px;
+    font-weight:600;
+    padding:11px 8px;
+    border-radius:9px;
+    border:1.5px solid var(--line);
+    background:#fbfbf9;
+    color:var(--pine-700);
+    cursor:pointer;
+    text-align:center;
+    transition:all .15s ease;
+  }
+  .chip-btn .sub{
+    display:block; font-weight:400; font-size:10.5px; color:var(--ink-soft); margin-top:2px;
+  }
+  .chip-btn:hover{border-color:#b9c6bd;}
+  .chip-btn.active{
+    background:var(--pine-800);
+    border-color:var(--pine-800);
+    color:#fff;
+  }
+  .chip-btn.active .sub{color:#c7d8cd;}
+
+  .disclaimer-box{
+    margin-top:24px;
+    font-size:12px;
+    color:var(--ink-soft);
+    background:var(--pine-100);
+    border:1px solid #cfe0d4;
+    border-radius:10px;
+    padding:12px 14px;
+    line-height:1.5;
+  }
+  .disclaimer-box.info{
+    display:flex; gap:10px; align-items:flex-start;
+    color:var(--pine-800);
+  }
+  .disclaimer-box.info svg{flex:none; margin-top:1px; color:var(--pine-700);}
+  .disclaimer-box.info strong{color:var(--pine-950);}
+
+  /* ---------- Beneficio Fiscale Iper Ammortamento ---------- */
+  .fiscal-card{
+    margin-top:24px;
+    padding:26px 26px 22px;
+    border-top:3px solid var(--amber-500);
+  }
+  .fiscal-card .section-label{
+    display:flex; align-items:center; gap:8px;
+  }
+  .fiscal-card .section-label .badge{
+    font-family:'Inter', sans-serif;
+    text-transform:none;
+    letter-spacing:normal;
+    font-size:10.5px;
+    font-weight:700;
+    color:var(--amber-600);
+    background:var(--amber-100);
+    border:1px solid #f0d9a8;
+    padding:2px 8px;
+    border-radius:999px;
+  }
+  .iper-print-heading{display:none;}
+  .iper-results{
+    margin-top:20px;
+    background:var(--pine-100);
+    border:1px solid #cfe0d4;
+    border-radius:12px;
+    padding:2px 18px;
+  }
+  .iper-result-row{
+    display:flex; justify-content:space-between; align-items:flex-start; gap:12px;
+    padding:13px 0;
+    border-top:1px solid #cfe0d4;
+    font-size:13.5px;
+  }
+  .iper-result-row:first-child{border-top:none;}
+  .iper-result-row .k{color:var(--pine-800); font-weight:500; display:flex; flex-direction:column; gap:2px;}
+  .iper-result-row .k .iper-formula{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    font-weight:500;
+    color:var(--ink-soft);
+  }
+  .iper-result-row .v{
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:700;
+    color:var(--pine-950);
+    text-align:right;
+    white-space:nowrap;
+    padding-top:1px;
+  }
+  .iper-result-row .v .v-note{
+    display:block;
+    font-family:'Inter', sans-serif;
+    font-size:10.5px;
+    font-weight:500;
+    color:var(--ink-soft);
+    margin-top:2px;
+    white-space:nowrap;
+  }
+  .iper-result-row.highlight .k{font-weight:700; color:var(--pine-950);}
+  .iper-result-row.highlight .v{color:var(--amber-600); font-size:17px;}
+
+  @media (max-width:480px){
+    .iper-result-row{flex-direction:column; align-items:flex-start; gap:4px;}
+    .iper-result-row .v{text-align:left; align-self:flex-start;}
+  }
+
+  .warning{
+    margin-top:6px;
+    font-size:12.5px;
+    color:var(--danger);
+    background:var(--danger-bg);
+    border:1px solid #f1cccc;
+    border-radius:8px;
+    padding:8px 10px;
+    display:none;
+  }
+  .warning.show{display:block;}
+
+  .catalogo-note{
+    margin-top:8px;
+    font-size:12.5px;
+    line-height:1.5;
+    border-radius:8px;
+    padding:9px 11px;
+    border:1px solid transparent;
+  }
+  .catalogo-note.ok{
+    color:#1f5c3a;
+    background:#e7f5ec;
+    border-color:#bfe3cd;
+  }
+  .catalogo-note.sopra{
+    color:var(--danger);
+    background:var(--danger-bg);
+    border-color:#f1cccc;
+  }
+  .catalogo-note.sotto{
+    color:#8a5a10;
+    background:var(--amber-100);
+    border-color:#f0d9a8;
+  }
+  .catalogo-note strong{font-weight:700;}
+
+  .cci-toggle{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:10px;
+    font-size:13.5px;
+    color:var(--ink);
+    cursor:pointer;
+    user-select:none;
+    background:var(--amber-100);
+    border:1.5px solid #f0d9a8;
+    border-radius:9px;
+    padding:10px 12px;
+  }
+  .cci-toggle input[type=checkbox]{
+    width:20px; height:20px;
+    accent-color:var(--amber-600);
+    cursor:pointer;
+    flex:none;
+  }
+  .cci-toggle .cci-label{font-weight:700; color:var(--pine-950);}
+  .cci-toggle .cci-hint{color:#7a5313; font-weight:500;}
+  .cci-toggle.disabled{opacity:.5; cursor:not-allowed; background:var(--paper); border-color:var(--line);}
+  .cci-toggle.disabled input[type=checkbox]{cursor:not-allowed;}
+
+  /* ---------- Result panel ---------- */
+  .result-wrap{position:sticky; top:20px;}
+  @media (max-width:880px){.result-wrap{position:static;}}
+
+  .result-card{
+    background:linear-gradient(165deg, var(--pine-950) 0%, var(--pine-800) 55%, var(--pine-700) 100%);
+    color:#eef3ef;
+    border-radius:var(--radius);
+    padding:26px 26px 22px;
+    box-shadow:0 20px 45px -20px rgba(14,42,33,.55);
+    position:relative;
+    overflow:hidden;
+  }
+  .result-card::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:radial-gradient(circle at 85% -10%, rgba(217,154,43,.28), transparent 55%);
+    pointer-events:none;
+  }
+  .result-top{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    position:relative;
+  }
+  .result-top .eyebrow{
+    font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+    color:#bcd4c4; font-weight:600;
+  }
+  .product-pill{
+    font-size:11px; font-weight:700; letter-spacing:.03em;
+    background:rgba(217,154,43,.22);
+    color:var(--amber-100);
+    border:1px solid rgba(217,154,43,.45);
+    padding:4px 10px; border-radius:999px;
+  }
+  .impianto-info{
+    margin-top:12px;
+    font-size:12.5px;
+    color:#cfe3d6;
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+    position:relative;
+  }
+  .impianto-info strong{color:#fff; font-weight:700;}
+
+  .canone-display{
+    margin-top:18px;
+    position:relative;
+  }
+  .canone-label{
+    font-size:13px; color:#c7d8cd; font-weight:500;
+  }
+  .canone-number{
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:700;
+    font-size:clamp(36px, 6vw, 50px);
+    letter-spacing:-0.01em;
+    margin:4px 0 2px;
+    color:#ffffff;
+    display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;
+  }
+  .canone-number .period{
+    font-family:'Inter', sans-serif;
+    font-size:15px; font-weight:600; color:#cfe3d6;
+  }
+  .canone-meter{
+    height:3px; width:100%; border-radius:3px;
+    background:rgba(255,255,255,.12);
+    overflow:hidden;
+    margin-top:14px;
+  }
+  .canone-meter i{
+    display:block; height:100%; width:62%;
+    background:linear-gradient(90deg, var(--amber-500), #f3c565);
+    animation:flow 2.6s ease-in-out infinite;
+    border-radius:3px;
+  }
+  @keyframes flow{
+    0%,100%{width:52%;}
+    50%{width:78%;}
+  }
+
+  .breakdown{
+    margin-top:22px;
+    display:flex; flex-direction:column;
+    position:relative;
+  }
+  .breakdown-row{
+    display:flex; justify-content:space-between; gap:12px;
+    padding:11px 0;
+    border-top:1px solid rgba(255,255,255,.12);
+    font-size:13.5px;
+  }
+  .breakdown-row .k{color:#bcd4c4;}
+  .breakdown-row .v{
+    font-weight:600; color:#fff; text-align:right;
+  }
+  .breakdown-row .v.small{font-weight:500; font-size:12.5px; color:#dcebe1;}
+
+  .quote-actions{
+    margin-top:20px;
+    display:flex; gap:10px;
+    position:relative;
+  }
+  .btn{
+    font-family:'Inter', sans-serif;
+    font-weight:600; font-size:13.5px;
+    padding:11px 16px;
+    border-radius:9px;
+    border:none;
+    cursor:pointer;
+    display:inline-flex; align-items:center; gap:7px;
+    transition:transform .12s ease, filter .12s ease;
+  }
+  .btn:active{transform:scale(.97);}
+  .btn-primary{
+    background:var(--amber-500);
+    color:#3a2a08;
+    flex:1;
+    justify-content:center;
+  }
+  .btn-primary:hover{filter:brightness(1.06);}
+  .btn-ghost{
+    background:rgba(255,255,255,.1);
+    color:#fff;
+    border:1px solid rgba(255,255,255,.25);
+  }
+  .btn-ghost:hover{background:rgba(255,255,255,.16);}
+
+  .foot-note{
+    margin-top:16px;
+    font-size:11px;
+    color:#a9c2b4;
+    position:relative;
+    line-height:1.5;
+  }
+
+  /* ---------- Confronto durate (dettaglio collassabile, Locazione) ---------- */
+  details.compare{
+    margin-top:14px;
+  }
+  details.compare summary{
+    cursor:pointer;
+    list-style:none;
+    display:flex; align-items:center; gap:8px;
+    font-size:12.5px; font-weight:600; color:var(--pine-700);
+    padding:12px 4px;
+    border-top:1px solid var(--line);
+  }
+  details.compare summary::-webkit-details-marker{display:none;}
+  details.compare summary .chevron{
+    transition:transform .18s ease;
+    flex:none;
+  }
+  details.compare[open] summary .chevron{transform:rotate(90deg);}
+  .table-scroll{overflow-x:auto; -webkit-overflow-scrolling:touch;}
+  table.compare-table{width:100%; border-collapse:collapse; font-size:12.5px; min-width:440px;}
+  table.compare-table thead tr{background:var(--pine-100);}
+  table.compare-table th{
+    padding:9px 10px; font-weight:600; font-size:10.5px; text-transform:uppercase;
+    letter-spacing:.03em; color:var(--pine-700); text-align:right; white-space:nowrap;
+  }
+  table.compare-table th:first-child{text-align:left;}
+  table.compare-table td{
+    padding:9px 10px; border-top:1px solid var(--line); text-align:right;
+    white-space:nowrap; color:var(--ink);
+  }
+  table.compare-table td:first-child{text-align:left; font-weight:600; color:var(--pine-800);}
+  table.compare-table tr.row-active td{background:var(--pine-100); font-weight:700;}
+  table.compare-table tr{cursor:pointer;}
+
+  .note-tassi summary{color:var(--amber-600);}
+  .note-tassi-body{padding:4px 4px 6px;}
+  .note-table{font-size:14px; min-width:680px;}
+  .note-table th{font-size:11.5px;}
+  .note-table tr{cursor:default;}
+  .note-table td{text-align:center; padding:12px 8px;}
+  .note-table td:first-child{text-align:left; font-size:13.5px;}
+  input.note-input{
+    width:104px;
+    text-align:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:19px !important;
+    font-weight:700 !important;
+    letter-spacing:.01em;
+    padding:10px 4px !important;
+    border:2px solid var(--pine-700) !important;
+    border-radius:7px !important;
+    background:#fff !important;
+    color:var(--pine-950) !important;
+    -webkit-text-fill-color:var(--pine-950) !important;
+    appearance:textfield;
+    -moz-appearance:textfield;
+  }
+  input.note-input::-webkit-outer-spin-button,
+  input.note-input::-webkit-inner-spin-button{
+    -webkit-appearance:none;
+    margin:0;
+  }
+  input.note-input:focus{
+    outline:none;
+    border-color:var(--amber-600) !important;
+    background:#fff !important;
+    box-shadow:0 0 0 3px rgba(217,154,43,.25);
+  }
+
+  .empty-state{
+    padding:22px 4px; color:var(--ink-soft); font-size:13.5px; line-height:1.6;
+  }
+
+  /* sticky mobile bar */
+  .mobile-bar{
+    display:none;
+  }
+  @media (max-width:880px){
+    .mobile-bar{
+      display:flex;
+      position:fixed; left:0; right:0; bottom:0;
+      background:var(--pine-950);
+      color:#fff;
+      padding:12px 18px calc(12px + env(safe-area-inset-bottom));
+      align-items:center; justify-content:space-between;
+      box-shadow:0 -8px 24px rgba(0,0,0,.25);
+      z-index:20;
+    }
+    .mobile-bar .lbl{font-size:11.5px; color:#bcd4c4;}
+    .mobile-bar .val{
+      font-family:'IBM Plex Mono', monospace; font-weight:700; font-size:22px;
+    }
+    .mobile-bar .val .per{font-family:'Inter'; font-size:12px; font-weight:500; color:#cfe3d6;}
+  }
+
+  /* Print */
+  @media print{
+    body{background:#fff;}
+    .brand svg, header.top .rate-note, .mode-switch{display:none;}
+    main{display:block; padding:0;}
+    .mode-panel{display:none !important;}
+    .mode-panel.active{display:block !important;}
+    .form-card{display:none;}
+    .result-wrap{position:static;}
+    .result-card{background:#fff; color:#111; box-shadow:none; border:1.5px solid #163b2e;}
+    .result-card::before{display:none;}
+    .canone-number, .canone-label, .breakdown-row .k, .breakdown-row .v, .foot-note, .result-top .eyebrow, .impianto-info, .impianto-info strong{color:#111 !important;}
+    .canone-meter, .quote-actions, .mobile-bar, details.compare{display:none !important;}
+    .product-pill{color:#7a5313; border-color:#c8871f; background:#fbedd3;}
+    .fiscal-card{border:1.5px solid #163b2e; box-shadow:none; break-inside:avoid; margin-top:16px;}
+    .fiscal-card .iper-inputs{display:none !important;}
+    .fiscal-card .iper-print-heading{display:block !important;}
+    .iper-result-row .k, .iper-result-row .v{color:#111 !important;}
+    #iper-disclaimer{color:#333 !important; background:#f3f5f2; border-color:#c9d4cc;}
+  }
+  
+  /* ============================================================
+     VERSION FOOTER & UPDATE NOTIFICATION
+     ============================================================ */
+  .version-footer{
+    margin-top: 32px;
+    padding: 16px;
+    border-top: 1px solid var(--line);
+    background: var(--paper);
+    font-size: 12px;
+    color: #666;
+  }
+  
+  .version-container{
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  
+  .version-info{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  #version-text{
+    font-size: 12px;
+    color: #999;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  
+  .check-update-btn{
+    padding: 6px 12px;
+    font-size: 12px;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--pine-950);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+  }
+  
+  .check-update-btn:hover:not(:disabled){
+    background: var(--paper);
+    border-color: var(--pine-700);
+  }
+  
+  .check-update-btn:disabled{
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .update-notification{
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    max-width: 360px;
+    background: #fff;
+    border: 2px solid #f97316;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    z-index: 9999;
+    animation: slideIn 0.3s ease;
+  }
+  
+  @keyframes slideIn {
+    from {
+      transform: translateX(400px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  .update-content{
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .update-content strong{
+    display: block;
+    margin-bottom: 8px;
+    color: #f97316;
+  }
+  
+  .update-content p{
+    margin: 8px 0;
+    font-size: 13px;
+  }
+  
+  .update-actions{
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  
+  .btn-primary, .btn-secondary{
+    flex: 1;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .btn-primary{
+    background: #f97316;
+    color: #fff;
+  }
+  
+  .btn-primary:hover{
+    background: #ea580c;
+  }
+  
+  .btn-secondary{
+    background: #e5e7eb;
+    color: #333;
+  }
+  
+  .btn-secondary:hover{
+    background: #d1d5db;
+  }
+  
+  @media (max-width: 768px) {
+    .update-notification{
+      bottom: 16px;
+      right: 12px;
+      left: 12px;
+      max-width: none;
+    }
+    
+    .version-container{
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">
+    <svg width="42" height="42" viewBox="0 0 42 42" fill="none">
+      <circle cx="21" cy="21" r="20" fill="#163b2e"/>
+      <path d="M21 30c-5-1.5-8-6-8-11 0-3 1.2-5.6 3-7.4C18 13.8 21 12 21 12s3 1.8 5 3.6c1.8 1.8 3 4.4 3 7.4 0 5-3 9.5-8 11Z" fill="#eef3ef"/>
+      <path d="M21 30V16" stroke="#163b2e" stroke-width="1.4"/>
+      <path d="M21 20l-3-2M21 24l3-2" stroke="#163b2e" stroke-width="1.4" stroke-linecap="round"/>
+    </svg>
+    <div class="brand-text">
+      <div class="eyebrow">Preventivatore Dealer</div>
+      <h1 id="page-title">Leasing Finanziario · Fonti Verdi Mobiliari</h1>
+    </div>
+  </div>
+  <p class="subtitle" id="page-subtitle">Calcola in tempo reale il canone per il prodotto FTV (Beni Fonti Verdi Mobiliari) e condividi la quotazione con il cliente.</p>
+  <span class="rate-note"><span class="dot"></span> <span id="rate-note-text">Parametri di tasso aggiornati al 28/05/2026</span></span>
+</header>
+
+<div class="mode-switch" id="mode-switch">
+  <button type="button" class="mode-card active" data-mode="leasing">
+    <span class="ic">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/><path d="M3 12h18"/></svg>
+    </span>
+    <span class="tx">
+      <span class="tt">Leasing Finanziario</span>
+      <span class="dd">Beni Fonti Verdi Mobiliari (FTV)</span>
+    </span>
+  </button>
+  <button type="button" class="mode-card" data-mode="locazione">
+    <span class="ic">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 21V9l9-6 9 6v12"/><path d="M9 21v-6h6v6"/></svg>
+    </span>
+    <span class="tx">
+      <span class="tt">Locazione Operativa</span>
+      <span class="dd">Beni Green · mensile o trimestrale</span>
+    </span>
+  </button>
+</div>
+
+<main>
+
+  <!-- =================== PANEL: LEASING FINANZIARIO =================== -->
+  <section class="mode-panel active" id="panel-leasing">
+   <div class="two-col-grid">
+    <!-- FORM -->
+    <section class="card form-card">
+      <p class="section-label">Dati dell'operazione</p>
+      <div class="field-grid">
+        <div class="field">
+          <label for="potenza-ftv">Potenza FTV</label>
+          <div class="suffix-input">
+            <input type="text" inputmode="decimal" id="potenza-ftv" placeholder="Es. 20">
+            <span>kWp</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="batteria">Potenza Batteria</label>
+          <div class="suffix-input">
+            <input type="text" inputmode="decimal" id="batteria" placeholder="Es. 10">
+            <span>kW</span>
+          </div>
+        </div>
+
+        <div class="field full">
+          <label class="lg" for="imponibile">Importo del bene (IVA esclusa)</label>
+          <div class="prefix-input prefix-input--lg">
+            <span>€</span>
+            <input type="text" inputmode="numeric" id="imponibile" value="30.000">
+          </div>
+          <div id="warn-importo" class="warning">Il prodotto FTV è disponibile per importi da € 15.000,01. Inserisci un imponibile superiore.</div>
+          <label class="cci-toggle" id="cci-toggle-wrap">
+            <input type="checkbox" id="cci-presente">
+            <span><span class="cci-label">Clicca se CCI presente</span> <span class="cci-hint">(aggiunge € 18.000 al max caricabile FTV — disponibile solo per Potenza FTV superiore a 100 kWp)</span></span>
+          </label>
+          <div id="catalogo-note" class="catalogo-note" style="display:none;"></div>
+        </div>
+
+        <div class="field full">
+          <label>Beneficio Fiscale da Iper Ammortamento</label>
+          <div class="toggle-group" id="iper-toggle">
+            <button type="button" data-val="no" class="active">Non includere</button>
+            <button type="button" data-val="si">Includi analisi</button>
+          </div>
+          <div class="hint">Se incluso: durata contrattuale selezionabile da 3 a 5 anni, riscatto finale bloccato all'1% e, per importi superiori a € 150.000, periodicità solo mensile.</div>
+        </div>
+
+        <div class="field">
+          <label for="durata">Durata contrattuale</label>
+          <select id="durata">
+            <option value="3">3 anni (36 mesi)</option>
+            <option value="4">4 anni (48 mesi)</option>
+            <option value="5" selected>5 anni (60 mesi)</option>
+            <option value="6">6 anni (72 mesi)</option>
+            <option value="7">7 anni (84 mesi)</option>
+          </select>
+          <div class="hint" id="durata-lock-hint" style="display:none;">Selezionabile da 3 a 5 anni per l'analisi Iper Ammortamento.</div>
+        </div>
+
+        <div class="field">
+          <label for="periodicita">Periodicità canoni</label>
+          <select id="periodicita">
+            <option value="12" selected>Mensile</option>
+            <option value="6">Bimestrale</option>
+            <option value="4">Trimestrale</option>
+          </select>
+          <div class="hint" id="periodicita-lock-hint" style="display:none;">Solo Mensile: importo superiore a € 150.000 con Iper Ammortamento.</div>
+        </div>
+
+        <div class="field full">
+          <label>Tipo di tasso</label>
+          <div class="toggle-group" id="tipo-tasso">
+            <button type="button" data-val="FIX" class="active">Fisso</button>
+            <button type="button" data-val="IND">Indicizzato</button>
+          </div>
+          <div class="hint">Il tasso indicizzato si applica solo oltre € 100.000; sotto tale soglia viene comunque usato il tasso fisso IRS.</div>
+        </div>
+      </div>
+
+      <p class="section-label">Anticipo e riscatto</p>
+      <div class="field-grid">
+        <div class="field full">
+          <label>Tipo anticipo</label>
+          <div class="toggle-group" id="tipo-anticipo">
+            <button type="button" data-val="pct" class="active">Anticipo in %</button>
+            <button type="button" data-val="costanti">Canoni costanti</button>
+          </div>
+          <div class="hint" id="anticipo-hint">Un anticipo iniziale riduce l'importo finanziato; i canoni restanti sono posticipati.</div>
+        </div>
+
+        <div class="field">
+          <label for="pct-anticipo">% Anticipo</label>
+          <div class="suffix-input">
+            <input type="number" id="pct-anticipo" value="10" min="0" max="90" step="1">
+            <span>%</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="pct-riscatto">Riscatto finale</label>
+          <div class="suffix-input">
+            <input type="number" id="pct-riscatto" value="1" min="0" max="5" step="0.5">
+            <span>%</span>
+          </div>
+          <div class="hint" id="riscatto-lock-hint" style="display:none;">Bloccato all'1% per l'analisi Iper Ammortamento.</div>
+        </div>
+      </div>
+
+      <div class="disclaimer-box">
+        La presente quotazione ha valore puramente indicativo ed è soggetta ad approvazione da parte della società concedente.
+      </div>
+
+      <details class="compare note-tassi" id="note-tassi">
+        <summary>
+          <svg class="chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg>
+          Foglio NOTE · Parametri di tasso (uso back office)
+        </summary>
+        <div class="note-tassi-body">
+          <div class="hint">
+            Aggiornare qui l'<strong>IRS</strong> con la media mensile riferita al mese solare precedente, e l'<strong>Euribor 3 mesi</strong> con la rilevazione del giorno lavorativo precedente. Il canone di leasing userà automaticamente questi valori.
+          </div>
+          <div class="table-scroll">
+            <table class="compare-table note-table">
+              <thead>
+                <tr>
+                  <th>Parametro</th>
+                  <th>3 anni</th>
+                  <th>4 anni</th>
+                  <th>5 anni</th>
+                  <th>6 anni</th>
+                  <th>7 anni</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <!-- ============================================================ -->
+                <!-- ▼▼▼  QUI SOTTO: VALORI IRS DA AGGIORNARE OGNI MESE  ▼▼▼        -->
+                <!-- Cambia solo il numero dentro value="...", usando il PUNTO     -->
+                <!-- come separatore decimale (es. 2.95, non 2,95).                -->
+                <!-- ============================================================ -->
+                <tr>
+                  <td>IRS (%)</td>
+
+                  <!-- CAMBIA QUI: IRS a 3 anni -->
+                  <td><input type="number" class="note-input" id="note-irs-3" step="0.001" value="2.73"></td>
+
+                  <!-- CAMBIA QUI: IRS a 4 anni -->
+                  <td><input type="number" class="note-input" id="note-irs-4" step="0.001" value="2.74"></td>
+
+                  <!-- CAMBIA QUI: IRS a 5 anni -->
+                  <td><input type="number" class="note-input" id="note-irs-5" step="0.001" value="2.75"></td>
+
+                  <!-- CAMBIA QUI: IRS a 6 anni -->
+                  <td><input type="number" class="note-input" id="note-irs-6" step="0.001" value="2.78"></td>
+
+                  <!-- CAMBIA QUI: IRS a 7 anni -->
+                  <td><input type="number" class="note-input" id="note-irs-7" step="0.001" value="2.81"></td>
+                </tr>
+
+                <!-- ============================================================ -->
+                <!-- ▼▼▼  QUI SOTTO: VALORE EURIBOR 3M DA AGGIORNARE OGNI GIORNO ▼▼▼ -->
+                <!-- È lo stesso identico valore ripetuto 5 volte (non cambia in    -->
+                <!-- base alla durata): se lo aggiorni, scrivi lo stesso numero     -->
+                <!-- nuovo in tutte e 5 le caselle qui sotto.                       -->
+                <!-- ============================================================ -->
+                <tr>
+                  <td>Euribor 3M (%)</td>
+
+                  <!-- CAMBIA QUI: Euribor 3M (colonna 3 anni) -->
+                  <td><input type="number" class="note-input" id="note-eur-3" step="0.001" value="2.35"></td>
+
+                  <!-- CAMBIA QUI: Euribor 3M (colonna 4 anni) -->
+                  <td><input type="number" class="note-input" id="note-eur-4" step="0.001" value="2.35"></td>
+
+                  <!-- CAMBIA QUI: Euribor 3M (colonna 5 anni) -->
+                  <td><input type="number" class="note-input" id="note-eur-5" step="0.001" value="2.35"></td>
+
+                  <!-- CAMBIA QUI: Euribor 3M (colonna 6 anni) -->
+                  <td><input type="number" class="note-input" id="note-eur-6" step="0.001" value="2.35"></td>
+
+                  <!-- CAMBIA QUI: Euribor 3M (colonna 7 anni) -->
+                  <td><input type="number" class="note-input" id="note-eur-7" step="0.001" value="2.35"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- ============================================================ -->
+          <!-- ▼▼▼  QUI SOTTO: LA FRASE CHE GLI UTENTI VEDONO IN ALTO  ▼▼▼    -->
+          <!-- Scrivi liberamente il mese IRS e il giorno Euribor a cui ti   -->
+          <!-- sei riferito per aggiornare i valori qui sopra.               -->
+          <!-- ============================================================ -->
+          <div class="field full" style="margin-top:14px;">
+            <label for="note-riferimento">Nota sul periodo di riferimento (visibile agli utenti in alto nella pagina)</label>
+            <input type="text" id="note-riferimento" value="IRS: media mensile di giugno 2026 · Euribor 3M: rilevazione del 29/06/2026">
+          </div>
+          <div class="hint" style="margin-top:8px;">
+            Questi valori non vengono salvati automaticamente: se la pagina viene ricaricata o il file rinviato, tornano ai valori scritti nel file. Aggiornare qui in occasione di ogni modifica e ridistribuire il file, oppure ospitarlo in un'unica posizione condivisa.
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <!-- RESULT -->
+    <div class="result-wrap">
+      <section class="card result-card">
+        <div class="result-top">
+          <div class="eyebrow">Quotazione stimata</div>
+          <div class="product-pill">FTV · Fonti Verdi Mobiliari</div>
+        </div>
+        <div class="impianto-info" id="impianto-info" style="display:none;"></div>
+
+        <div class="canone-display">
+          <div class="canone-label">Canone di leasing</div>
+          <div class="canone-number"><span id="out-rata">€ 0,00</span><span class="period" id="out-periodo">/ mese</span></div>
+          <div class="canone-meter"><i></i></div>
+        </div>
+
+        <div class="breakdown">
+          <div class="breakdown-row"><span class="k">TAN</span><span class="v" id="out-tan">–</span></div>
+          <div class="breakdown-row"><span class="k">Numero canoni</span><span class="v" id="out-ncanoni">–</span></div>
+          <div class="breakdown-row"><span class="k">Anticipo</span><span class="v" id="out-anticipo">–</span></div>
+          <div class="breakdown-row"><span class="k">Valore di riscatto</span><span class="v" id="out-riscatto">–</span></div>
+          <div class="breakdown-row"><span class="k">Spese di incasso</span><span class="v" id="out-incasso">–</span></div>
+          <div class="breakdown-row"><span class="k">Spese di istruttoria</span><span class="v small" id="out-istruttoria">–</span></div>
+          <div class="breakdown-row"><span class="k">Assicurazione</span><span class="v small" id="out-assicurazione">–</span></div>
+        </div>
+
+        <div class="quote-actions">
+          <button class="btn btn-primary" id="btn-print">🖨️ Stampa quotazione</button>
+          <button class="btn btn-ghost" id="btn-share">🔗 Copia riepilogo</button>
+        </div>
+
+        <p class="foot-note">Simulazione indicativa basata sui parametri correnti per il prodotto FTV (Beni Fonti Verdi Mobiliari). Non costituisce offerta contrattuale.</p>
+      </section>
+    </div>
+   </div>
+
+    <!-- BENEFICIO FISCALE IPER AMMORTAMENTO -->
+    <section class="card fiscal-card" id="iper-card" style="display:none;">
+      <div class="iper-inputs">
+        <p class="section-label">Beneficio Fiscale da Iper Ammortamento <span class="badge">Beni Green</span></p>
+        <div class="hint" style="margin:-8px 0 4px;">I parametri seguenti sono fissi, definiti dalla normativa vigente in materia di Iper Ammortamento, e non sono modificabili.</div>
+        <div class="field-grid">
+          <div class="field">
+            <label>Prezzo del bene</label>
+            <div class="prefix-input">
+              <span>€</span>
+              <input type="text" id="iper-prezzo" disabled>
+            </div>
+            <div class="hint">Coincide con l'importo del bene indicato sopra.</div>
+          </div>
+
+          <div class="field">
+            <label for="iper-durata">Durata ammortamento fiscale</label>
+            <div class="suffix-input">
+              <input type="number" id="iper-durata" value="5" disabled>
+              <span>anni</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="iper-std">Aliquota ammortamento standard</label>
+            <div class="suffix-input">
+              <input type="number" id="iper-std" value="100" disabled>
+              <span>%</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="iper-magg">Maggiorazione Iper Ammortamento</label>
+            <div class="suffix-input">
+              <input type="number" id="iper-magg" value="180" disabled>
+              <span>%</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Totale ammortamento</label>
+            <div class="suffix-input">
+              <input type="text" id="iper-tot" disabled>
+              <span>%</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="iper-ires">Aliquota IRES</label>
+            <div class="suffix-input">
+              <input type="number" id="iper-ires" value="24" disabled>
+              <span>%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="section-label iper-print-heading">Beneficio Fiscale da Iper Ammortamento</p>
+
+      <div class="iper-results">
+        <div class="iper-result-row">
+          <span class="k">Beneficio fiscale annuo a valere su IRES<span class="iper-formula">(Prezzo del bene × Totale ammortamento ÷ Durata) × Aliquota IRES</span></span>
+          <span class="v" id="iper-out-annuo">–</span>
+        </div>
+        <div class="iper-result-row">
+          <span class="k">Totale beneficio fiscale (durata)<span class="iper-formula">Beneficio fiscale annuo × numero di anni</span></span>
+          <span class="v" id="iper-out-totale">–</span>
+        </div>
+        <div class="iper-result-row highlight">
+          <span class="k">Totale "spesa" netta con Iper Ammortamento<span class="iper-formula">Prezzo del bene − Totale beneficio fiscale</span></span>
+          <span class="v" id="iper-out-spesa">–</span>
+        </div>
+      </div>
+
+      <div class="disclaimer-box" id="iper-disclaimer">
+        Simulazione teorica del beneficio fiscale da maggiorazione dell'ammortamento per impianti fotovoltaici, sistemi di accumulo e quanto previsto dalla normativa in vigore; non tiene conto di eventuali limiti normativi, plafond o condizioni di accesso specifiche. Verificare sempre con il proprio consulente fiscale.
+      </div>
+    </section>
+  </section>
+
+  <!-- =================== PANEL: LOCAZIONE OPERATIVA =================== -->
+  <section class="mode-panel" id="panel-locazione">
+   <div class="two-col-grid">
+    <!-- FORM -->
+    <section class="card form-card">
+      <p class="section-label">Dati dell'operazione</p>
+      <div class="field-grid">
+        <div class="field">
+          <label for="loc-potenza-ftv">Potenza FTV</label>
+          <div class="suffix-input">
+            <input type="text" inputmode="decimal" id="loc-potenza-ftv" placeholder="Es. 20">
+            <span>kWp</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="loc-batteria">Potenza Batteria</label>
+          <div class="suffix-input">
+            <input type="text" inputmode="decimal" id="loc-batteria" placeholder="Es. 10">
+            <span>kW</span>
+          </div>
+        </div>
+
+        <div class="field full">
+          <label class="lg" for="loc-valore">Valore Contratto (IVA esclusa)</label>
+          <div class="prefix-input prefix-input--lg">
+            <span>€</span>
+            <input type="text" inputmode="numeric" id="loc-valore" value="50.000">
+          </div>
+          <div id="loc-warn" class="warning"></div>
+          <label class="cci-toggle" id="loc-cci-toggle-wrap">
+            <input type="checkbox" id="loc-cci-presente">
+            <span><span class="cci-label">Clicca se CCI presente</span> <span class="cci-hint">(aggiunge € 18.000 al max caricabile FTV — disponibile solo per Potenza FTV superiore a 100 kWp)</span></span>
+          </label>
+          <div id="loc-catalogo-note" class="catalogo-note" style="display:none;"></div>
+        </div>
+
+        <div class="field full">
+          <label>Periodicità canoni</label>
+          <div class="toggle-group" id="loc-periodicita">
+            <button type="button" data-val="mensile">Mensile</button>
+            <button type="button" data-val="trimestrale" class="active">Trimestrale</button>
+          </div>
+        </div>
+
+        <div class="field full">
+          <label>Durata contrattuale</label>
+          <div class="chip-row" id="loc-durata">
+            <button type="button" class="chip-btn" data-val="36">36<span class="sub">mesi</span></button>
+            <button type="button" class="chip-btn" data-val="48">48<span class="sub">mesi</span></button>
+            <button type="button" class="chip-btn active" data-val="60">60<span class="sub">mesi</span></button>
+            <button type="button" class="chip-btn" data-val="72">72<span class="sub">mesi</span></button>
+            <button type="button" class="chip-btn" data-val="84">84<span class="sub">mesi</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="disclaimer-box">
+        La presente quotazione ha valore puramente indicativo ed è soggetta ad approvazione da parte della società concedente.
+      </div>
+    </section>
+
+    <!-- RESULT -->
+    <div class="result-wrap">
+      <section class="card result-card">
+        <div class="result-top">
+          <div class="eyebrow">Quotazione stimata</div>
+          <div class="product-pill">Locazione Operativa · Beni Green</div>
+        </div>
+        <div class="impianto-info" id="loc-impianto-info" style="display:none;"></div>
+
+        <div class="canone-display">
+          <div class="canone-label">Canone di locazione</div>
+          <div class="canone-number"><span id="loc-out-rata">€ 0,00</span><span class="period" id="loc-out-periodo">/ trimestre</span></div>
+          <div class="canone-meter"><i></i></div>
+        </div>
+
+        <div class="breakdown" id="loc-breakdown">
+          <div class="breakdown-row"><span class="k">Numero canoni</span><span class="v" id="loc-out-ncanoni">–</span></div>
+          <div class="breakdown-row"><span class="k">Totale spesa cliente</span><span class="v" id="loc-out-totale">–</span></div>
+          <div class="breakdown-row"><span class="k">Spese di istruttoria</span><span class="v small" id="loc-out-istruttoria">–</span></div>
+          <div class="breakdown-row"><span class="k">Riacquisto fornitore (1%)</span><span class="v small" id="loc-out-riacquisto">–</span></div>
+          <div class="breakdown-row"><span class="k">Spese di incasso</span><span class="v small" id="loc-out-incasso">Nessuna</span></div>
+          <div class="breakdown-row"><span class="k">Assicurazione</span><span class="v small">All Risk inclusa</span></div>
+        </div>
+
+        <details class="compare">
+          <summary>
+            <svg class="chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg>
+            Confronta tutte le durate
+          </summary>
+          <div class="table-scroll">
+            <table class="compare-table" id="loc-table">
+              <thead>
+                <tr><th>Durata</th><th>N° canoni</th><th>Canone</th><th>Tot. spesa cliente</th></tr>
+              </thead>
+              <tbody id="loc-table-body"></tbody>
+            </table>
+          </div>
+        </details>
+
+        <div class="quote-actions">
+          <button class="btn btn-primary" id="loc-btn-print">🖨️ Stampa quotazione</button>
+          <button class="btn btn-ghost" id="loc-btn-share">🔗 Copia riepilogo</button>
+        </div>
+
+        <p class="foot-note">Simulazione indicativa basata sui parametri correnti per la Locazione Operativa di Beni Green. Non costituisce offerta contrattuale.</p>
+      </section>
+    </div>
+   </div>
+  </section>
+
+</main>
+
+<div class="mobile-bar" id="mobile-bar-leasing">
+  <div>
+    <div class="val"><span id="out-rata-mobile">€ 0,00</span> <span class="per" id="out-periodo-mobile">/ mese</span></div>
+  </div>
+
+</div>
+
+<div class="mobile-bar" id="mobile-bar-locazione" style="display:none;">
+  <div>
+    <div class="val"><span id="loc-out-rata-mobile">€ 0,00</span> <span class="per" id="loc-out-periodo-mobile">/ trimestre</span></div>
+  </div>
+
+</div>
+
+<footer class="version-footer">
+  <div class="version-container">
+    <div class="version-info">
+      <span id="version-text">Ultima modifica: caricamento...</span>
+      <button id="check-update-btn" class="check-update-btn" title="Controlla se è disponibile una versione più recente">
+        🔄 Controlla aggiornamenti
+      </button>
+    </div>
+  </div>
+</footer>
+
+<div id="update-notification" class="update-notification" style="display: none;">
+  <div class="update-content">
+    <strong>📦 Nuova versione disponibile!</strong>
+    <p id="update-message">È disponibile una versione più recente di questo strumento.</p>
+    <div class="update-actions">
+      <button id="reload-btn" class="btn-primary">Ricarica</button>
+      <button id="dismiss-btn" class="btn-secondary">Più tardi</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   VERSION CHECK & UPDATE NOTIFICATION
+   ============================================================ */
+(function(){
+  const versionEl = document.getElementById('version-text');
+  const checkBtn = document.getElementById('check-update-btn');
+  const notifEl = document.getElementById('update-notification');
+  const reloadBtn = document.getElementById('reload-btn');
+  const dismissBtn = document.getElementById('dismiss-btn');
+  
+  const META_VERSION = document.querySelector('meta[name="version-info"]')?.content || 'sconosciuta';
+  const GITHUB_RAW_URL = document.querySelector('meta[name="github-raw-url"]')?.content || '';
+  
+  // Mostra versione attuale al caricamento
+  function displayCurrentVersion(){
+    if(META_VERSION !== 'sconosciuta'){
+      const [date, time] = META_VERSION.split(' ');
+      versionEl.textContent = `Ultima modifica: ${date} ${time || ''}`.trim();
+    }
+  }
+  
+  // Controlla se c'è una nuova versione su GitHub
+  async function checkForUpdates(){
+    if(!GITHUB_RAW_URL){
+      alert('⚠️ URL GitHub non configurato. Contatta l\'amministratore.');
+      return;
+    }
+    
+    checkBtn.disabled = true;
+    checkBtn.textContent = '⏳ Controllo in corso...';
+    
+    try {
+      const response = await fetch(GITHUB_RAW_URL, { cache: 'no-store' });
+      if(!response.ok) throw new Error('Errore nel recupero della versione');
+      
+      const remoteContent = await response.text();
+      const remoteVersionMatch = remoteContent.match(/content="([^"]*)" name="version-info"/);
+      const remoteVersion = remoteVersionMatch ? remoteVersionMatch[1] : null;
+      
+      if(!remoteVersion){
+        alert('⚠️ Versione remota non trovata. Contatta l\'amministratore.');
+        return;
+      }
+      
+      if(remoteVersion !== META_VERSION){
+        showUpdateNotification(remoteVersion);
+      } else {
+        alert('✅ Utilizzi già la versione più recente!');
+      }
+    } catch(err) {
+      console.error('Errore nel controllo aggiornamenti:', err);
+      alert('❌ Errore nel controllo aggiornamenti. Verifica la connessione e riprova.');
+    } finally {
+      checkBtn.disabled = false;
+      checkBtn.textContent = '🔄 Controlla aggiornamenti';
+    }
+  }
+  
+  function showUpdateNotification(newVersion){
+    const [newDate, newTime] = newVersion.split(' ');
+    document.getElementById('update-message').textContent = 
+      `Una nuova versione è disponibile (${newDate} ${newTime || ''})`.trim();
+    notifEl.style.display = 'block';
+    notifEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  
+  // Event listeners
+  checkBtn.addEventListener('click', checkForUpdates);
+  reloadBtn.addEventListener('click', () => window.location.reload());
+  dismissBtn.addEventListener('click', () => notifEl.style.display = 'none');
+  
+  // Inizializza
+  displayCurrentVersion();
+})();
+</script>
+
+<script>
+/* ============================================================
+   MODE SWITCH
+   ============================================================ */
+(function(){
+  const CONTENT = {
+    leasing:{
+      title:'Leasing Finanziario · Fonti Verdi Mobiliari',
+      subtitle:"Calcola in tempo reale il canone per il prodotto FTV (Beni Fonti Verdi Mobiliari) e condividi la quotazione con il cliente."
+    },
+    locazione:{
+      title:'Locazione Operativa · Beni Green',
+      subtitle:'Stima il canone di locazione operativa a partire dal Valore Contratto per i Beni Green, con confronto tra tutte le durate disponibili.',
+      rate:'Listino aggiornato al 15/04/2026'
+    }
+  };
+  const cards = document.querySelectorAll('.mode-card');
+  const panels = { leasing: document.getElementById('panel-leasing'), locazione: document.getElementById('panel-locazione') };
+  const bars = { leasing: document.getElementById('mobile-bar-leasing'), locazione: document.getElementById('mobile-bar-locazione') };
+  const rateNoteText = document.getElementById('rate-note-text');
+  const noteRiferimento = document.getElementById('note-riferimento');
+
+  let currentMode = 'leasing';
+
+  // Per il Leasing Finanziario, la nota sui tassi mostrata in alto pagina
+  // riflette sempre quanto scritto nel Foglio NOTE (campo "riferimento"),
+  // così l'utente sa sempre a quale mese/giorno si riferiscono IRS ed Euribor.
+  function syncRateNote(){
+    if (currentMode === 'leasing'){
+      rateNoteText.textContent = noteRiferimento.value || 'Parametri di tasso da aggiornare nel Foglio NOTE.';
+    } else {
+      rateNoteText.textContent = CONTENT.locazione.rate;
+    }
+  }
+  noteRiferimento.addEventListener('input', syncRateNote);
+
+  cards.forEach(card=>{
+    card.addEventListener('click', ()=>{
+      const mode = card.dataset.mode;
+      currentMode = mode;
+      cards.forEach(c=>c.classList.toggle('active', c===card));
+      Object.keys(panels).forEach(k=>panels[k].classList.toggle('active', k===mode));
+      Object.keys(bars).forEach(k=>bars[k].style.display = (k===mode) ? 'flex' : 'none');
+      document.getElementById('page-title').textContent = CONTENT[mode].title;
+      document.getElementById('page-subtitle').textContent = CONTENT[mode].subtitle;
+      syncRateNote();
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+
+  syncRateNote();
+})();
+
+/* ============================================================
+   LEASING FINANZIARIO (FTV)
+   ============================================================ */
+(function(){
+  // I tassi IRS ed Euribor non sono più valori fissi nel codice:
+  // vengono letti in tempo reale dal Foglio NOTE (tabella E3:I5),
+  // così chi gestisce il file può aggiornarli senza toccare altro.
+  function getIRS(durata){
+    const el = document.getElementById('note-irs-' + durata);
+    const v = el ? parseFloat(el.value) : NaN;
+    return (isNaN(v) ? 0 : v) / 100;
+  }
+  function getEuribor(durata){
+    const el = document.getElementById('note-eur-' + durata);
+    const v = el ? parseFloat(el.value) : NaN;
+    return (isNaN(v) ? 0 : v) / 100;
+  }
+
+  function spreadFTV(importo){
+    if (importo <= 25000) return 0.0640;
+    if (importo <= 50000) return 0.0545;
+    if (importo <= 70000) return 0.0520;
+    if (importo <= 125000) return 0.0475;
+    if (importo <= 250000) return 0.0420;
+    return 0.0370;
+  }
+
+  function PMT(rate, nper, pv, fv, type){
+    fv = fv || 0; type = type || 0;
+    if (rate === 0) return -(pv + fv) / nper;
+    const pvif = Math.pow(1 + rate, nper);
+    let pmt = rate / (pvif - 1) * -(pv * pvif + fv);
+    if (type === 1) pmt /= (1 + rate);
+    return pmt;
+  }
+
+  const fmtEUR = n => n.toLocaleString('it-IT', {style:'currency', currency:'EUR', minimumFractionDigits:2, maximumFractionDigits:2, useGrouping:true});
+
+  let tipoTasso = 'FIX';
+  let tipoAnticipo = 'pct';
+
+  const el = id => document.getElementById(id);
+
+  function setToggle(groupId, val){
+    document.querySelectorAll('#'+groupId+' button').forEach(b=>{
+      b.classList.toggle('active', b.dataset.val === val);
+    });
+  }
+
+  el('tipo-tasso').addEventListener('click', e=>{
+    if (e.target.tagName !== 'BUTTON') return;
+    tipoTasso = e.target.dataset.val;
+    setToggle('tipo-tasso', tipoTasso);
+    calcola();
+  });
+
+  el('tipo-anticipo').addEventListener('click', e=>{
+    if (e.target.tagName !== 'BUTTON') return;
+    tipoAnticipo = e.target.dataset.val;
+    setToggle('tipo-anticipo', tipoAnticipo);
+    const pctField = el('pct-anticipo');
+    pctField.disabled = (tipoAnticipo === 'costanti');
+    el('anticipo-hint').textContent = tipoAnticipo === 'costanti'
+      ? 'Con canoni costanti il primo canone viene corrisposto in via anticipata: non è previsto un maxi-anticipo separato.'
+      : 'Un anticipo iniziale riduce l\'importo finanziato; i canoni restanti sono posticipati.';
+    calcola();
+  });
+
+  ['durata','periodicita','pct-anticipo','pct-riscatto'].forEach(id=>{
+    el(id).addEventListener('input', calcola);
+    el(id).addEventListener('change', calcola);
+  });
+
+  // Ricalcola quando vengono modificati i tassi nel Foglio NOTE
+  [3,4,5,6,7].forEach(d=>{
+    ['note-irs-'+d, 'note-eur-'+d].forEach(id=>{
+      const field = el(id);
+      if (field){
+        field.addEventListener('input', calcola);
+        field.addEventListener('change', calcola);
+      }
+    });
+  });
+
+  // Il riscatto finale non può superare il 5%, anche se il valore viene digitato
+  // o impostato al di fuori dei normali controlli dello spinner del browser.
+  el('pct-riscatto').addEventListener('input', ()=>{
+    const r = el('pct-riscatto');
+    if (r.value !== '' && parseFloat(r.value) > 5){
+      r.value = '5';
+    }
+  });
+  el('pct-riscatto').addEventListener('blur', ()=>{
+    const r = el('pct-riscatto');
+    let v = parseFloat(r.value);
+    if (isNaN(v) || v < 0) v = 0;
+    if (v > 5) v = 5;
+    r.value = v;
+    calcola();
+  });
+
+  function parseImporto(str){
+    return parseFloat(String(str).replace(/\./g, '').replace(',', '.')) || 0;
+  }
+  function formatImportoInput(n){
+    return Math.round(n).toLocaleString('it-IT', {useGrouping:true});
+  }
+  const importoField = el('imponibile');
+  importoField.addEventListener('input', ()=>{
+    const raw = parseImporto(importoField.value);
+    const formatted = formatImportoInput(raw);
+    importoField.value = formatted;
+    importoField.setSelectionRange(formatted.length, formatted.length);
+    calcola();
+  });
+  importoField.addEventListener('blur', ()=>{
+    importoField.value = formatImportoInput(parseImporto(importoField.value));
+  });
+
+  const periodLabel = { '12':'/ mese', '6':'/ bimestre', '4':'/ trimestre' };
+
+  function calcola(){
+    const importo = parseImporto(el('imponibile').value);
+    const durata = parseInt(el('durata').value, 10);
+    const periodsPerYear = parseInt(el('periodicita').value, 10);
+    const pctAnticipo = parseFloat(el('pct-anticipo').value) || 0;
+    const pctRiscatto = parseFloat(el('pct-riscatto').value) || 0;
+
+    const warn = el('warn-importo');
+    if (importo < 15000.01){
+      warn.classList.add('show');
+      ['out-rata','out-rata-mobile'].forEach(id => el(id).textContent = '— €');
+      ['out-tan','out-ncanoni','out-anticipo','out-riscatto','out-incasso','out-istruttoria','out-assicurazione']
+        .forEach(id => el(id).textContent = '–');
+      return;
+    }
+    warn.classList.remove('show');
+
+    const totalCanoni = durata * periodsPerYear;
+    const nCanoni = tipoAnticipo === 'costanti' ? totalCanoni : totalCanoni - 1;
+    const type = tipoAnticipo === 'costanti' ? 1 : 0;
+    const anticipoEuro = tipoAnticipo === 'costanti' ? 0 : (pctAnticipo/100) * importo;
+    const riscattoEuro = (pctRiscatto/100) * importo;
+
+    const spread = spreadFTV(importo);
+    const irs = getIRS(durata);
+    const tan = (importo > 100000 && tipoTasso === 'IND') ? (getEuribor(durata) + spread) : (irs + spread);
+
+    const rata = PMT(tan/periodsPerYear, nCanoni, -(importo - anticipoEuro), riscattoEuro, type);
+
+    const anticipoDisplay = tipoAnticipo === 'costanti'
+      ? PMT(tan/periodsPerYear, nCanoni, -(importo - anticipoEuro), riscattoEuro, 1)
+      : anticipoEuro;
+
+    const speseIstruttoria = importo > 100000 ? 'Da quantificare' : fmtEUR(0);
+    const assicurazione = importo > 100000
+      ? 'Da quotare'
+      : 'All Risk compresa nei canoni, a cura della società concedente';
+
+    el('out-rata').textContent = fmtEUR(rata);
+    el('out-rata-mobile').textContent = fmtEUR(rata);
+    const pLabel = periodLabel[String(periodsPerYear)];
+    el('out-periodo').textContent = pLabel;
+    el('out-periodo-mobile').textContent = pLabel;
+
+    el('out-tan').textContent = (tan * 100).toLocaleString('it-IT', {minimumFractionDigits:2, maximumFractionDigits:3}) + '%';
+    el('out-ncanoni').textContent = nCanoni;
+    el('out-anticipo').textContent = tipoAnticipo === 'costanti'
+      ? (fmtEUR(anticipoDisplay) + ' (1° canone)')
+      : fmtEUR(anticipoDisplay);
+    el('out-riscatto').textContent = fmtEUR(riscattoEuro);
+    el('out-incasso').textContent = fmtEUR(4.5);
+    el('out-istruttoria').textContent = speseIstruttoria;
+    el('out-assicurazione').textContent = assicurazione;
+  }
+
+  function printQuote(){
+    document.getElementById('panel-leasing').classList.add('active');
+    document.getElementById('panel-locazione').classList.remove('active');
+    window.print();
+  }
+  el('btn-print').addEventListener('click', printQuote);
+
+  el('btn-share').addEventListener('click', async ()=>{
+    const importo = parseImporto(el('imponibile').value);
+    const durata = el('durata').selectedOptions[0].textContent;
+    const periodicita = el('periodicita').selectedOptions[0].textContent;
+    const potenzaFtv = el('potenza-ftv').value.trim();
+    const batteria = el('batteria').value.trim();
+    const rigaImpianto = (potenzaFtv || batteria)
+      ? `${potenzaFtv ? 'Potenza FTV: ' + potenzaFtv + ' kWp\n' : ''}${batteria ? 'Potenza Batteria: ' + batteria + ' kW\n' : ''}`
+      : '';
+    const testo =
+`Quotazione Leasing Finanziario · FTV (Beni Fonti Verdi Mobiliari)
+${rigaImpianto}Imponibile: ${fmtEUR(importo)}
+Durata: ${durata}
+Periodicità: ${periodicita}
+Canone: ${el('out-rata').textContent} ${el('out-periodo').textContent}
+TAN: ${el('out-tan').textContent}
+Numero canoni: ${el('out-ncanoni').textContent}
+Anticipo: ${el('out-anticipo').textContent}
+Riscatto finale: ${el('out-riscatto').textContent}
+Spese di incasso: ${el('out-incasso').textContent}
+Spese di istruttoria: ${el('out-istruttoria').textContent}
+Assicurazione: ${el('out-assicurazione').textContent}
+
+La presente quotazione ha valore puramente indicativo ed è soggetta ad approvazione da parte della società concedente.`;
+    try{
+      await navigator.clipboard.writeText(testo);
+      const btn = el('btn-share');
+      const original = btn.innerHTML;
+      btn.innerHTML = '✓ Copiato';
+      setTimeout(()=>{ btn.innerHTML = original; }, 1600);
+    }catch(e){
+      alert(testo);
+    }
+  });
+
+  calcola();
+})();
+
+/* ============================================================
+   DETTAGLI IMPIANTO (Potenza FTV / Batteria) — solo informativi
+   Riutilizzata sia per il Leasing Finanziario che per la Locazione Operativa
+   ============================================================ */
+(function(){
+  const el = id => document.getElementById(id);
+
+  function setupImpiantoInfo(potenzaId, batteriaId, infoBoxId){
+    const potenzaField = el(potenzaId);
+    const batteriaField = el(batteriaId);
+    const infoBox = el(infoBoxId);
+
+    function updateImpiantoInfo(){
+      const potenza = potenzaField.value.trim();
+      const batteria = batteriaField.value.trim();
+      const parts = [];
+      if (potenza) parts.push(`Potenza FTV <strong>${potenza} kWp</strong>`);
+      if (batteria) parts.push(`Potenza Batteria <strong>${batteria} kW</strong>`);
+      if (parts.length){
+        infoBox.innerHTML = parts.map(p => `<span>${p}</span>`).join('');
+        infoBox.style.display = 'flex';
+      } else {
+        infoBox.style.display = 'none';
+        infoBox.innerHTML = '';
+      }
+    }
+
+    potenzaField.addEventListener('input', updateImpiantoInfo);
+    batteriaField.addEventListener('input', updateImpiantoInfo);
+    updateImpiantoInfo();
+  }
+
+  setupImpiantoInfo('potenza-ftv', 'batteria', 'impianto-info');
+  setupImpiantoInfo('loc-potenza-ftv', 'loc-batteria', 'loc-impianto-info');
+})();
+
+/* ============================================================
+   CONTROLLO CATALOGO FTV / BATTERIE (Aprile 2026)
+   Verifica che il prezzo inserito rientri nella somma dei range
+   di prezzo previsti dal catalogo per la potenza FTV e/o Batteria
+   indicate. Fasce derivate dal PDF "Catalogo FTV e Batterie".
+   ============================================================ */
+(function(){
+  const el = id => document.getElementById(id);
+
+  // Ogni riga: [kWp minimo, kWp massimo, prezzo minimo, prezzo massimo]
+  // Accessori = prezzo massimo x 10%; Max caricabile = prezzo massimo x 1,10.
+  // Dalla fascia "99,5-105,5 kWp" in poi si aggiunge un costo fisso di
+  // consulenza impianto (CCI) di € 18.000 al Max caricabile.
+  const FTV_RANGES = [
+    [3,5,4300,9100],[5.5,7.5,7900,12700],[8,10,11500,16300],[10.5,12.5,15100,19900],
+    [13,15,18700,23500],[15.5,17.5,22300,27100],[18,20,25900,30700],[20.5,22.5,26600,33100],
+    [23,25,29000,36500],[25.5,27.5,31400,39800],[28,30,34800,43200],[30.5,32.5,38100,46600],
+    [33,35,41500,49900],[35.5,37.5,44800,53300],[38,40,48200,56600],[40.5,42.5,51600,60000],
+    [43,45,54900,63400],[45.5,47.5,58300,66700],[48,50,61600,70100],[50.5,53.5,58200,73500],
+    [54,57,60700,77900],[57.5,60.5,65000,82200],[61,64,69400,86600],[64.5,67.5,73800,91000],
+    [68,71,78100,95300],[71.5,74.5,82500,99700],[75,78,86900,104100],[78.5,81.5,91200,108400],
+    [82,85,95600,122800],[85.5,88.5,100000,117200],[89,92,104400,121500],[92.5,95.5,108700,125900],
+    [96,99,113000,130300],
+    [99.5,105.5,91500,111100],[106,112,97800,117400],[112.5,118.5,105000,123700],
+    [119,125,105800,130000],[125.5,131.5,112000,136200],[132,138,118300,142500],
+    [138.5,144.5,124600,148800],[145,151,130900,155100],[151.5,157.5,137100,161300],
+    [158,164,143400,167600],[164.5,170.5,149700,173900],[171,177,156000,180200],
+    [177.5,183.5,162300,186500],[184,190,168500,192700],[190.5,196.5,174800,199000],
+    [197,203,181100,205300],[203.5,209.5,187400,211600],[210,216,193700,217900],
+    [216.5,222.5,199900,224100],[223,229,206200,230400],[229.5,235.5,212500,236700],
+    [236,242,218800,243000],[242.5,248.5,225100,249200],[249,255,231300,255500],
+    [255.5,261.5,237600,261800],[262,268,243900,268100],[268.5,274.5,250200,274400],
+    [275,281,256400,280600],[281.5,287.5,262700,286900],[288,294,269000,293200],
+    [294.5,300.5,275300,299500],[301,321,263100,293400],[321.5,341.5,274600,311400],
+    [342,362,286000,329300],[362.5,382.5,303900,347200],[383,403,321900,365100],
+    [403.5,423.5,339800,383000],[424,444,357700,400900],[444.5,464.5,375600,418900],
+    [465,485,393530,436800],[485.5,505.5,411400,454700],[506,526,385600,431600],
+    [526.5,546.5,401600,447600],[547,567,407500,463600]
+  ];
+  const FTV_CCI_EXTRA = 18000; // aggiunto al max caricabile FTV solo se il flag "CCI presente" è attivo
+
+  // Ogni riga: [kW minimo, kW massimo, prezzo minimo, prezzo massimo]
+  // Max caricabile = prezzo massimo x 1,01 (accessori 1%).
+  const BATT_RANGES = [
+    [5,10,2750,8000],[10.1,15,5900,9500],[15.1,20,8600,13200],
+    [20.1,25,11400,15900],[25.1,30,13200,19100],[30.1,35,16000,21900],
+    [35.1,40,18600,24500],[40.1,45,21400,27300],[45.1,50,24100,31000],
+    [50.1,55,26400,33700],[55.1,60,29000,36400],[60.1,65,31800,40000],
+    [65.1,70,34600,43600],[70.1,75,38200,48200],[75.1,80,41000,51800],
+    [80.1,85,43600,56400],[85.1,90,46400,59100],[90.1,95,49100,61800],
+    [95.1,100,51800,65500]
+  ];
+
+  // Max caricabile FTV + Accessori (senza CCI): prezzo massimo x 1,10.
+  function ftvMaxCaricabile(row){
+    return row[3] * 1.10;
+  }
+  function battMaxCaricabile(row){
+    return row[3] * 1.01;
+  }
+
+  // Trova la fascia corrispondente al valore; se il valore cade in un "buco"
+  // tra due fasce (o fuori dai limiti della tabella), usa la fascia più vicina.
+  function findNearestRange(value, ranges){
+    for (const r of ranges){
+      if (value >= r[0] && value <= r[1]) return r;
+    }
+    let nearest = ranges[0];
+    let minDist = Infinity;
+    for (const r of ranges){
+      const dist = value < r[0] ? (r[0] - value) : (value - r[1]);
+      if (dist < minDist){ minDist = dist; nearest = r; }
+    }
+    return nearest;
+  }
+
+  // Le batterie oltre 100 kW proseguono "per multipli" del catalogo (indicazione
+  // esplicita del PDF): si scompone in blocchi pieni da 100 kW + un resto.
+  function batteryRangeSum(kw){
+    const lastRow = BATT_RANGES[BATT_RANGES.length - 1]; // 95,1-100 kW, usato come blocco da 100kW
+    if (kw <= 100){
+      const r = findNearestRange(kw, BATT_RANGES);
+      return { min: r[2], max: battMaxCaricabile(r) };
+    }
+    const blocchi = Math.floor(kw / 100);
+    const resto = kw - blocchi * 100;
+    let min = blocchi * lastRow[2];
+    let max = blocchi * battMaxCaricabile(lastRow);
+    if (resto > 0){
+      const r = findNearestRange(resto, BATT_RANGES);
+      min += r[2];
+      max += battMaxCaricabile(r);
+    }
+    return { min, max };
+  }
+
+  function fmtEUR(n){
+    return n.toLocaleString('it-IT', {style:'currency', currency:'EUR', minimumFractionDigits:0, maximumFractionDigits:0});
+  }
+
+  function parseImportoLocale(str){
+    return parseFloat(String(str).replace(/\./g, '').replace(',', '.')) || 0;
+  }
+
+  // Collega il controllo a una coppia di campi (potenza FTV / batteria) più il
+  // prezzo principale del pannello, mostrando l'esito nel box indicato.
+  function setupCatalogoCheck(potenzaId, batteriaId, prezzoId, noteId, cciId){
+    const potenzaField = el(potenzaId);
+    const batteriaField = el(batteriaId);
+    const prezzoField = el(prezzoId);
+    const note = el(noteId);
+    const cciField = el(cciId);
+    const cciWrap = cciField ? cciField.closest('.cci-toggle') : null;
+
+    // Il flag CCI è selezionabile solo per Potenza FTV uguale o superiore a 100 kWp;
+    // sotto questa soglia viene disabilitato e riportato automaticamente a "non spuntato".
+    function updateCciAvailability(potenza){
+      if (!cciField) return;
+      const abilitato = !isNaN(potenza) && potenza >= 100;
+      cciField.disabled = !abilitato;
+      if (cciWrap) cciWrap.classList.toggle('disabled', !abilitato);
+      if (!abilitato && cciField.checked){
+        cciField.checked = false;
+      }
+    }
+
+    function run(){
+      const potenza = parseFloat(String(potenzaField.value).replace(',', '.'));
+      const batteria = parseFloat(String(batteriaField.value).replace(',', '.'));
+      const haPotenza = !isNaN(potenza) && potenza > 0;
+      const haBatteria = !isNaN(batteria) && batteria > 0;
+
+      updateCciAvailability(potenza);
+
+      if (!haPotenza && !haBatteria){
+        note.style.display = 'none';
+        note.className = 'catalogo-note';
+        note.innerHTML = '';
+        return;
+      }
+
+      let sumMin = 0, sumMax = 0;
+      const dettagli = [];
+      const cciAttivo = !!(cciField && cciField.checked);
+
+      if (haPotenza){
+        const r = findNearestRange(potenza, FTV_RANGES);
+        let max = ftvMaxCaricabile(r);
+        if (cciAttivo) max += FTV_CCI_EXTRA;
+        sumMin += r[2];
+        sumMax += max;
+        dettagli.push(`FTV ${potenza} kWp → fascia catalogo ${r[0]}-${r[1]} kWp (${fmtEUR(r[2])} - ${fmtEUR(max)}${cciAttivo ? ', incluso CCI' : ''})`);
+      }
+      if (haBatteria){
+        const { min, max } = batteryRangeSum(batteria);
+        sumMin += min;
+        sumMax += max;
+        dettagli.push(`Batteria ${batteria} kW → range catalogo (${fmtEUR(min)} - ${fmtEUR(max)})`);
+      }
+
+      const prezzo = parseImportoLocale(prezzoField.value);
+      note.style.display = 'block';
+
+      if (prezzo <= 0){
+        note.className = 'catalogo-note';
+        note.style.display = 'none';
+        return;
+      }
+
+      if (prezzo > sumMax){
+        note.className = 'catalogo-note sopra';
+        note.innerHTML = `<strong>Il prezzo supera il range previsto dal catalogo</strong> (max ${fmtEUR(sumMax)}): è necessario sentire l'ufficio di Geco Finance.<br>${dettagli.join('<br>')}`;
+      } else if (prezzo < sumMin){
+        note.className = 'catalogo-note sotto';
+        note.innerHTML = `<strong>Il prezzo è inferiore al range previsto dal catalogo</strong> (min ${fmtEUR(sumMin)}): verificare con l'ufficio di Geco Finance.<br>${dettagli.join('<br>')}`;
+      } else {
+        note.className = 'catalogo-note ok';
+        note.innerHTML = `<strong>Il range è ok</strong> — il prezzo rientra nel catalogo (${fmtEUR(sumMin)} - ${fmtEUR(sumMax)}).<br>${dettagli.join('<br>')}`;
+      }
+    }
+
+    [potenzaField, batteriaField, prezzoField].forEach(f=>{
+      f.addEventListener('input', run);
+      f.addEventListener('change', run);
+    });
+    if (cciField) cciField.addEventListener('change', run);
+    run();
+  }
+
+  setupCatalogoCheck('potenza-ftv', 'batteria', 'imponibile', 'catalogo-note', 'cci-presente');
+  setupCatalogoCheck('loc-potenza-ftv', 'loc-batteria', 'loc-valore', 'loc-catalogo-note', 'loc-cci-presente');
+})();
+
+/* ============================================================
+   BENEFICIO FISCALE DA IPER AMMORTAMENTO (Fotovoltaico)
+   ============================================================ */
+(function(){
+  const el = id => document.getElementById(id);
+  const fmtEUR = n => n.toLocaleString('it-IT', {style:'currency', currency:'EUR', minimumFractionDigits:2, maximumFractionDigits:2, useGrouping:true});
+
+  function parseImporto(str){
+    return parseFloat(String(str).replace(/\./g, '').replace(',', '.')) || 0;
+  }
+  function formatImportoInput(n){
+    return Math.round(n).toLocaleString('it-IT', {useGrouping:true});
+  }
+
+  function calcolaIper(){
+    const prezzo = parseImporto(el('imponibile').value);
+    el('iper-prezzo').value = formatImportoInput(prezzo);
+
+    const durata = parseFloat(el('iper-durata').value) || 0;
+    const std = parseFloat(el('iper-std').value) || 0;
+    const magg = parseFloat(el('iper-magg').value) || 0;
+    const ires = parseFloat(el('iper-ires').value) || 0;
+    const totAmm = std + magg;
+    el('iper-tot').value = totAmm.toLocaleString('it-IT');
+
+    if (prezzo <= 0 || durata <= 0){
+      el('iper-out-annuo').textContent = '–';
+      el('iper-out-totale').textContent = '–';
+      el('iper-out-spesa').textContent = '–';
+      return;
+    }
+
+    const beneficioAnnuo = prezzo * (totAmm/100) / durata * (ires/100);
+    const beneficioTotale = beneficioAnnuo * durata;
+    const spesaNetta = prezzo - beneficioTotale;
+
+    el('iper-out-annuo').textContent = fmtEUR(beneficioAnnuo);
+    el('iper-out-totale').innerHTML = `${fmtEUR(beneficioTotale)}<span class="v-note">su ${durata} ${durata===1?'anno':'anni'}</span>`;
+    el('iper-out-spesa').textContent = fmtEUR(spesaNetta);
+  }
+
+  // Ricalcola quando cambia l'importo del bene (campo condiviso col leasing)
+  el('imponibile').addEventListener('input', calcolaIper);
+  el('imponibile').addEventListener('blur', calcolaIper);
+
+  ['iper-durata','iper-std','iper-magg','iper-ires'].forEach(id=>{
+    el(id).addEventListener('input', calcolaIper);
+    el(id).addEventListener('change', calcolaIper);
+  });
+
+  calcolaIper();
+})();
+
+/* ============================================================
+   TOGGLE BENEFICIO FISCALE DA IPER AMMORTAMENTO
+   (vincola durata, riscatto e periodicità quando attivo)
+   ============================================================ */
+(function(){
+  const el = id => document.getElementById(id);
+  function parseImporto(str){
+    return parseFloat(String(str).replace(/\./g, '').replace(',', '.')) || 0;
+  }
+  function fireEvents(elm){
+    elm.dispatchEvent(new Event('input', {bubbles:true}));
+    elm.dispatchEvent(new Event('change', {bubbles:true}));
+  }
+
+  let iperAttivo = false;
+
+  const toggleGroup = el('iper-toggle');
+  const fiscalCard = el('iper-card');
+  const durataSel = el('durata');
+  const riscattoInput = el('pct-riscatto');
+  const periodicitaSel = el('periodicita');
+  const importoField = el('imponibile');
+
+  const durataHint = el('durata-lock-hint');
+  const riscattoHint = el('riscatto-lock-hint');
+  const periodicitaHint = el('periodicita-lock-hint');
+
+  function applyConstraints(){
+    if (!iperAttivo){
+      durataSel.disabled = false;
+      Array.from(durataSel.options).forEach(opt => { opt.disabled = false; });
+      riscattoInput.disabled = false;
+      periodicitaSel.disabled = false;
+      durataHint.style.display = 'none';
+      riscattoHint.style.display = 'none';
+      periodicitaHint.style.display = 'none';
+      return;
+    }
+
+    // Durata contrattuale: selezionabile solo da 3 a 5 anni (6 e 7 anni non ammessi)
+    Array.from(durataSel.options).forEach(opt => {
+      opt.disabled = (opt.value === '6' || opt.value === '7');
+    });
+    if (durataSel.value === '6' || durataSel.value === '7'){
+      durataSel.value = '5';
+      fireEvents(durataSel);
+    }
+    durataSel.disabled = false;
+    durataHint.style.display = 'block';
+    syncIperDurata();
+
+    // Riscatto finale bloccato all'1%
+    if (riscattoInput.value !== '1'){
+      riscattoInput.value = '1';
+      fireEvents(riscattoInput);
+    }
+    riscattoInput.disabled = true;
+    riscattoHint.style.display = 'block';
+
+    // Periodicità: solo Mensile per importi superiori a € 150.000
+    const importo = parseImporto(importoField.value);
+    if (importo > 150000){
+      if (periodicitaSel.value !== '12'){
+        periodicitaSel.value = '12';
+        fireEvents(periodicitaSel);
+      }
+      periodicitaSel.disabled = true;
+      periodicitaHint.style.display = 'block';
+    } else {
+      periodicitaSel.disabled = false;
+      periodicitaHint.style.display = 'none';
+    }
+  }
+
+  // Tiene allineata la durata dell'ammortamento fiscale (nella card Iper Ammortamento)
+  // con la durata contrattuale scelta, quando l'analisi è attiva.
+  function syncIperDurata(){
+    const iperDurata = el('iper-durata');
+    if (iperDurata.value !== durataSel.value){
+      iperDurata.value = durataSel.value;
+      fireEvents(iperDurata);
+    }
+  }
+
+  durataSel.addEventListener('change', ()=>{ if (iperAttivo) syncIperDurata(); });
+
+  toggleGroup.addEventListener('click', e=>{
+    if (e.target.tagName !== 'BUTTON') return;
+    iperAttivo = e.target.dataset.val === 'si';
+    document.querySelectorAll('#iper-toggle button').forEach(b=>b.classList.toggle('active', b.dataset.val === e.target.dataset.val));
+    fiscalCard.style.display = iperAttivo ? '' : 'none';
+    applyConstraints();
+  });
+
+  importoField.addEventListener('input', ()=>{ if (iperAttivo) applyConstraints(); });
+  importoField.addEventListener('blur', ()=>{ if (iperAttivo) applyConstraints(); });
+
+  fiscalCard.style.display = 'none';
+})();
+
+/* ============================================================
+   LOCAZIONE OPERATIVA (Beni Green)
+   ============================================================ */
+(function(){
+  const BRACKETS = [
+    { max: 10000, label: "fino a 10.000" },
+    { max: 25000, label: "10.001 – 25.000" },
+    { max: 50000, label: "25.001 – 50.000" },
+    { max: 100000, label: "50.001 – 100.000" },
+    { max: 250000, label: "100.001 – 250.000" },
+    { max: 500000, label: "250.001 – 500.000" },
+  ];
+  const DURATIONS = [36, 48, 60, 72, 84];
+  const QUARTERLY_COEFF = [
+    { 36: 9.572, 48: 7.434, 60: 6.155, 72: 5.307, 84: 4.706 },
+    { 36: 9.527, 48: 7.388, 60: 6.11, 72: 5.262, 84: 4.658 },
+    { 36: 9.469, 48: 7.33, 60: 6.051, 72: 5.202, 84: 4.599 },
+    { 36: 9.455, 48: 7.316, 60: 6.036, 72: 5.187, 84: 4.584 },
+    { 36: 9.409, 48: 7.27, 60: 5.992, 72: 5.142, 84: 4.537 },
+    { 36: 9.393, 48: 7.254, 60: 5.975, 72: 5.125, 84: 4.52 },
+  ];
+  const MONTHLY_COEFF = [
+    { 36: 0.031697644976582375, 48: 0.024629938252244424, 60: 0.020401623737701029, 72: 0.017597167217085131, 84: 0.015607586447580575 },
+    { 36: 0.031552044615606699, 48: 0.024482169394997727, 60: 0.020256201432718401, 72: 0.017449171110747522, 84: 0.015451915560197422 },
+    { 36: 0.031369422374160107, 48: 0.024297000712717422, 60: 0.020063241697876003, 72: 0.017252960343761021, 84: 0.015257333663717334 },
+    { 36: 0.031322695382655155, 48: 0.024249653456896416, 60: 0.020015169260556031, 72: 0.017204107547991915, 84: 0.015207667933088274 },
+    { 36: 0.031178099274393901, 48: 0.024103219426437811, 60: 0.019871354487000007, 72: 0.017058029763572791, 84: 0.015054294475350189 },
+    { 36: 0.03112688464545511, 48: 0.02405138352741807, 60: 0.019818773819097347, 72: 0.017004648735568124, 84: 0.015000086515700832 },
+  ];
+  const LIMITS = { trimestrale: { min: 5000, max: 500000 }, mensile: { min: 1500, max: 500000 } };
+
+  let periodicita = "trimestrale";
+  let selectedDuration = 60;
+
+  const el = id => document.getElementById(id);
+  const fmtEUR = n => n.toLocaleString('it-IT', {style:'currency', currency:'EUR', minimumFractionDigits:2, maximumFractionDigits:2, useGrouping:true});
+
+  function speseIstruttoria(idx) {
+    if (idx <= 3) return 0;
+    if (idx === 4) return 150;
+    return 350;
+  }
+  function getBracketIndex(v) {
+    for (let i = 0; i < BRACKETS.length; i++) if (v <= BRACKETS[i].max) return i;
+    return BRACKETS.length - 1;
+  }
+  function costiPerizia(v) {
+    if (v <= 500000) return null;
+    if (v <= 1000000) return "Costo perizia stimato: circa € 1.500 + IVA.";
+    return "Costo perizia stimato: da € 1.800 a € 2.500 + IVA.";
+  }
+
+  function parseImporto(str){
+    return parseFloat(String(str).replace(/\./g, '').replace(',', '.')) || 0;
+  }
+  function formatImportoInput(n){
+    return Math.round(n).toLocaleString('it-IT', {useGrouping:true});
+  }
+
+  const valoreField = el('loc-valore');
+  valoreField.addEventListener('input', ()=>{
+    const raw = parseImporto(valoreField.value);
+    const formatted = formatImportoInput(raw);
+    valoreField.value = formatted;
+    valoreField.setSelectionRange(formatted.length, formatted.length);
+    render();
+  });
+  valoreField.addEventListener('blur', ()=>{
+    valoreField.value = formatImportoInput(parseImporto(valoreField.value));
+  });
+
+  el('loc-periodicita').addEventListener('click', e=>{
+    if (e.target.tagName !== 'BUTTON') return;
+    periodicita = e.target.dataset.val;
+    document.querySelectorAll('#loc-periodicita button').forEach(b=>b.classList.toggle('active', b.dataset.val===periodicita));
+    render();
+  });
+
+  el('loc-durata').addEventListener('click', e=>{
+    const btn = e.target.closest('.chip-btn');
+    if (!btn) return;
+    selectedDuration = parseInt(btn.dataset.val, 10);
+    document.querySelectorAll('#loc-durata .chip-btn').forEach(b=>b.classList.toggle('active', parseInt(b.dataset.val,10)===selectedDuration));
+    render();
+  });
+
+  const periodLabelMap = { trimestrale:'/ trimestre', mensile:'/ mese' };
+
+  function render(){
+    const value = parseImporto(valoreField.value);
+    const limits = LIMITS[periodicita];
+    const inRange = value >= limits.min && value <= limits.max;
+
+    const warnBox = el('loc-warn');
+    if (!inRange && value > 0){
+      const msg = value > limits.max
+        ? "Per importi superiori a € 500.000 richiedere un'offerta ad hoc via mail."
+        : `Importo minimo per il canone ${periodicita}: ${fmtEUR(limits.min)}.`;
+      warnBox.textContent = msg;
+      warnBox.classList.add('show');
+    } else {
+      warnBox.classList.remove('show');
+      warnBox.textContent = '';
+    }
+
+    const pLabel = periodLabelMap[periodicita];
+    el('loc-out-periodo').textContent = pLabel;
+    el('loc-out-periodo-mobile').textContent = pLabel;
+
+    if (!inRange){
+      el('loc-out-rata').textContent = '— €';
+      el('loc-out-rata-mobile').textContent = '— €';
+      ['loc-out-ncanoni','loc-out-totale','loc-out-istruttoria','loc-out-riacquisto'].forEach(id=>el(id).textContent='–');
+      el('loc-table-body').innerHTML = '';
+      return;
+    }
+
+    const bracketIdx = getBracketIndex(Math.min(Math.max(value, 0), 500000));
+    const table = periodicita === "trimestrale" ? QUARTERLY_COEFF : MONTHLY_COEFF;
+    const setup = speseIstruttoria(bracketIdx);
+    const buyback = value * 0.01;
+
+    const rows = DURATIONS.map((m) => {
+      const coeff = table[bracketIdx][m];
+      const canone = periodicita === "trimestrale" ? (value * coeff) / 100 : value * coeff;
+      const numCanoni = periodicita === "trimestrale" ? m / 3 : m;
+      const totale = canone * numCanoni;
+      return { m, canone, numCanoni, totale };
+    });
+
+    const featured = rows.find(r => r.m === selectedDuration) || rows[2];
+
+    el('loc-out-rata').textContent = fmtEUR(featured.canone);
+    el('loc-out-rata-mobile').textContent = fmtEUR(featured.canone);
+    el('loc-out-ncanoni').textContent = featured.numCanoni;
+    el('loc-out-totale').textContent = fmtEUR(featured.totale);
+    el('loc-out-istruttoria').textContent = setup === 0 ? 'Nessuna' : fmtEUR(setup);
+    el('loc-out-riacquisto').textContent = fmtEUR(buyback) + ' + IVA';
+
+    el('loc-table-body').innerHTML = rows.map(r => `
+      <tr class="${r.m === selectedDuration ? 'row-active' : ''}" data-val="${r.m}">
+        <td>${r.m} mesi</td>
+        <td class="num">${r.numCanoni}</td>
+        <td class="num">${fmtEUR(r.canone)}</td>
+        <td class="num">${fmtEUR(r.totale)}</td>
+      </tr>`).join('');
+
+    document.querySelectorAll('#loc-table-body tr').forEach(tr=>{
+      tr.addEventListener('click', ()=>{
+        selectedDuration = parseInt(tr.dataset.val, 10);
+        document.querySelectorAll('#loc-durata .chip-btn').forEach(b=>b.classList.toggle('active', parseInt(b.dataset.val,10)===selectedDuration));
+        render();
+      });
+    });
+  }
+
+  function printQuote(){
+    document.getElementById('panel-locazione').classList.add('active');
+    document.getElementById('panel-leasing').classList.remove('active');
+    window.print();
+  }
+  el('loc-btn-print').addEventListener('click', printQuote);
+
+  el('loc-btn-share').addEventListener('click', async ()=>{
+    const value = parseImporto(valoreField.value);
+    const potenzaFtv = el('loc-potenza-ftv').value.trim();
+    const batteria = el('loc-batteria').value.trim();
+    const rigaImpianto = (potenzaFtv || batteria)
+      ? `${potenzaFtv ? 'Potenza FTV: ' + potenzaFtv + ' kWp\n' : ''}${batteria ? 'Potenza Batteria: ' + batteria + ' kW\n' : ''}`
+      : '';
+    const testo =
+`Quotazione Locazione Operativa · Beni Green
+${rigaImpianto}Valore Contratto: ${fmtEUR(value)}
+Periodicità: ${periodicita}
+Durata: ${selectedDuration} mesi
+Canone: ${el('loc-out-rata').textContent} ${el('loc-out-periodo').textContent}
+Numero canoni: ${el('loc-out-ncanoni').textContent}
+Totale spesa cliente: ${el('loc-out-totale').textContent}
+Spese di istruttoria: ${el('loc-out-istruttoria').textContent}
+Riacquisto fornitore: ${el('loc-out-riacquisto').textContent}
+Assicurazione: All Risk inclusa nei canoni, a cura della società concedente.
+
+La presente quotazione ha valore puramente indicativo ed è soggetta ad approvazione da parte della società concedente.`;
+    try{
+      await navigator.clipboard.writeText(testo);
+      const btn = el('loc-btn-share');
+      const original = btn.innerHTML;
+      btn.innerHTML = '✓ Copiato';
+      setTimeout(()=>{ btn.innerHTML = original; }, 1600);
+    }catch(e){
+      alert(testo);
+    }
+  });
+
+  render();
+})();
+</script>
+
+</body>
+</html>
