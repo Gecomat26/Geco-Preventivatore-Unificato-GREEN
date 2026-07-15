@@ -24,7 +24,7 @@
 <meta name="color-scheme" content="light">
 <title>Preventivatore Dealer · Leasing Finanziario &amp; Locazione Operativa</title>
 <meta name="version-info" content="2026-06-29 13:00">
-<meta name="github-raw-url" content="https://raw.githubusercontent.com/Gecomat26/Geco-Preventivatore-Unificato-GREEN/main/Preventivatore_Leasing_e_Noleggio_AGGIORNATO.html">
+<meta name="github-raw-url" content="https://raw.githubusercontent.com/TUONOME/REPO/main/Preventivatore_Leasing_e_Noleggio.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -1586,12 +1586,14 @@
   }
 
   function spreadFTV(importo){
-    if (importo <= 25000) return 0.0640;
-    if (importo <= 50000) return 0.0545;
-    if (importo <= 70000) return 0.0520;
-    if (importo <= 125000) return 0.0475;
-    if (importo <= 250000) return 0.0420;
-    return 0.0370;
+    // Spread FTV da Formula Excel NOTE!E17 - corretti secondo fascie di importo
+    if (importo <= 15000) return 0.0640;  // N16: ≤15.000 (6.40%)
+    if (importo <= 25000) return 0.0590;  // N17: 15.001-25.000 (5.90%) ← CORRETTO
+    if (importo <= 50000) return 0.0545;  // N18: 25.001-50.000 (5.45%)
+    if (importo <= 70000) return 0.0520;  // N19: 50.001-70.000 (5.20%)
+    if (importo <= 125000) return 0.0475; // N20: 70.001-125.000 (4.75%)
+    if (importo <= 250000) return 0.0420; // N21: 125.001-250.000 (4.20%)
+    return 0.0370;                         // N22: >250.000 (3.70%)
   }
 
   function PMT(rate, nper, pv, fv, type){
