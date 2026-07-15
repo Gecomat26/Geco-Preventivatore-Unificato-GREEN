@@ -759,6 +759,9 @@
     .mobile-bar .val .per{font-family:'Inter'; font-size:12px; font-weight:500; color:#cfe3d6;}
   }
 
+  /* Nascondi TAN nel leasing finanziario */
+  #tan-row{display:none !important;}
+
   /* Print */
   @media print{
     body{background:#fff;}
@@ -1188,7 +1191,7 @@
         </div>
 
         <div class="breakdown">
-          <div class="breakdown-row"><span class="k">TAN</span><span class="v" id="out-tan">–</span></div>
+          <div class="breakdown-row" id="tan-row"><span class="k">TAN</span><span class="v" id="out-tan">–</span></div>
           <div class="breakdown-row"><span class="k">Numero canoni</span><span class="v" id="out-ncanoni">–</span></div>
           <div class="breakdown-row"><span class="k">Anticipo</span><span class="v" id="out-anticipo">–</span></div>
           <div class="breakdown-row"><span class="k">Valore di riscatto</span><span class="v" id="out-riscatto">–</span></div>
@@ -1418,7 +1421,7 @@
 <footer class="version-footer">
   <div class="version-container">
     <div class="version-info">
-      <span id="version-text">Ultima modifica: caricamento...</span>
+      <span id="version-text">Calcolo basato su IRS e Euribor aggiornati al giorno caricamento...</span>
       <button id="check-update-btn" class="check-update-btn" title="Controlla se è disponibile una versione più recente">
         🔄 Controlla aggiornamenti
       </button>
@@ -1455,7 +1458,7 @@
   function displayCurrentVersion(){
     if(META_VERSION !== 'sconosciuta'){
       const [date, time] = META_VERSION.split(' ');
-      versionEl.textContent = `Ultima modifica: ${date} ${time || ''}`.trim();
+      versionEl.textContent = `Calcolo basato su IRS e Euribor aggiornati al giorno ${date} ${time || ''}`.trim();
     }
   }
   
