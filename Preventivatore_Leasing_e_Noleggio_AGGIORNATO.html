@@ -592,6 +592,10 @@
     font-family:'Inter', sans-serif;
     font-size:15px; font-weight:600; color:#cfe3d6;
   }
+  .canone-number .iva-note{
+    font-family:'Inter', sans-serif;
+    font-size:12px; font-weight:500; color:#a8b8a4;
+  }
   .canone-meter{
     height:3px; width:100%; border-radius:3px;
     background:rgba(255,255,255,.12);
@@ -604,6 +608,32 @@
     animation:flow 2.6s ease-in-out infinite;
     border-radius:3px;
   }
+  
+  /* Product Badges & Differentiation */
+  .product-badge{
+    display:inline-block;
+    padding:6px 12px;
+    border-radius:6px;
+    font-size:11px; font-weight:600;
+    letter-spacing:0.5px;
+    margin-bottom:12px;
+  }
+  .leasing-badge{
+    background:#1e7a4f; color:#ffffff; border-left:4px solid #22a870;
+  }
+  .operativa-badge{
+    background:#d97706; color:#ffffff; border-left:4px solid #f97316;
+  }
+  
+  .leasing-card{
+    border-left:4px solid #22a870;
+    padding-left:14px;
+  }
+  .operativa-card{
+    border-left:4px solid #f97316;
+    padding-left:14px;
+  }
+  
   @keyframes flow{
     0%,100%{width:52%;}
     50%{width:78%;}
@@ -1177,16 +1207,17 @@
 
     <!-- RESULT -->
     <div class="result-wrap">
-      <section class="card result-card">
+      <section class="card result-card leasing-section">
         <div class="result-top">
           <div class="eyebrow">Quotazione stimata</div>
           <div class="product-pill">FTV · Fonti Verdi Mobiliari</div>
         </div>
         <div class="impianto-info" id="impianto-info" style="display:none;"></div>
 
-        <div class="canone-display">
+        <div class="canone-display leasing-card">
+          <div class="product-badge leasing-badge">💳 LEASING FINANZIARIO</div>
           <div class="canone-label">Canone di leasing</div>
-          <div class="canone-number"><span id="out-rata">€ 0,00</span><span class="period" id="out-periodo">/ mese</span></div>
+          <div class="canone-number"><span id="out-rata">€ 0,00</span><span class="period" id="out-periodo">/ mese</span><span class="iva-note">+ IVA</span></div>
           <div class="canone-meter"><i></i></div>
         </div>
 
@@ -1354,26 +1385,27 @@
 
     <!-- RESULT -->
     <div class="result-wrap">
-      <section class="card result-card">
+      <section class="card result-card operativa-section">
         <div class="result-top">
           <div class="eyebrow">Quotazione stimata</div>
           <div class="product-pill">Locazione Operativa · Beni Green</div>
         </div>
         <div class="impianto-info" id="loc-impianto-info" style="display:none;"></div>
 
-        <div class="canone-display">
+        <div class="canone-display operativa-card">
+          <div class="product-badge operativa-badge">🏗️ LOCAZIONE OPERATIVA</div>
           <div class="canone-label">Canone di locazione</div>
-          <div class="canone-number"><span id="loc-out-rata">€ 0,00</span><span class="period" id="loc-out-periodo">/ trimestre</span></div>
+          <div class="canone-number"><span id="loc-out-rata">€ 0,00</span><span class="period" id="loc-out-periodo">/ trimestre</span><span class="iva-note">+ IVA</span></div>
           <div class="canone-meter"><i></i></div>
         </div>
 
         <div class="breakdown" id="loc-breakdown">
           <div class="breakdown-row"><span class="k">Numero canoni</span><span class="v" id="loc-out-ncanoni">–</span></div>
-          <div class="breakdown-row"><span class="k">Totale spesa cliente</span><span class="v" id="loc-out-totale">–</span></div>
+          <div class="breakdown-row" id="loc-totale-row" style="display:none;"><span class="k">Totale spesa cliente</span><span class="v" id="loc-out-totale">–</span></div>
           <div class="breakdown-row"><span class="k">Spese di istruttoria</span><span class="v small" id="loc-out-istruttoria">–</span></div>
           <div class="breakdown-row"><span class="k">Riacquisto fornitore (1%)</span><span class="v small" id="loc-out-riacquisto">–</span></div>
           <div class="breakdown-row"><span class="k">Spese di incasso</span><span class="v small" id="loc-out-incasso">Nessuna</span></div>
-          <div class="breakdown-row"><span class="k">Assicurazione</span><span class="v small">All Risk inclusa</span></div>
+          <div class="breakdown-row"><span class="k">Assicurazione</span><span class="v small">All Risk compresa nei canoni, a cura e carico dell'ente concedente</span></div>
         </div>
 
         <details class="compare">
@@ -1769,7 +1801,7 @@
 ${rigaImpianto}Imponibile: ${fmtEUR(importo)}
 Durata: ${durata}
 Periodicità: ${periodicita}
-Canone: ${el('out-rata').textContent} ${el('out-periodo').textContent}
+Canone: ${el('out-rata').textContent} ${el('out-periodo').textContent} + IVA
 TAN: ${el('out-tan').textContent}
 Numero canoni: ${el('out-ncanoni').textContent}
 Anticipo: ${el('out-anticipo').textContent}
@@ -2366,12 +2398,11 @@ La presente quotazione ha valore puramente indicativo ed è soggetta ad approvaz
 ${rigaImpianto}Valore Contratto: ${fmtEUR(value)}
 Periodicità: ${periodicita}
 Durata: ${selectedDuration} mesi
-Canone: ${el('loc-out-rata').textContent} ${el('loc-out-periodo').textContent}
+Canone: ${el('loc-out-rata').textContent} ${el('loc-out-periodo').textContent} + IVA
 Numero canoni: ${el('loc-out-ncanoni').textContent}
-Totale spesa cliente: ${el('loc-out-totale').textContent}
 Spese di istruttoria: ${el('loc-out-istruttoria').textContent}
 Riacquisto fornitore: ${el('loc-out-riacquisto').textContent}
-Assicurazione: All Risk inclusa nei canoni, a cura della società concedente.
+Assicurazione: All Risk compresa nei canoni, a cura e carico dell'ente concedente.
 
 La presente quotazione ha valore puramente indicativo ed è soggetta ad approvazione da parte della società concedente.`;
     try{
