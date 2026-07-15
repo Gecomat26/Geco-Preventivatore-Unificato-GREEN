@@ -833,6 +833,7 @@
     .canone-number, .canone-label, .breakdown-row .k, .breakdown-row .v, .foot-note, .result-top .eyebrow, .impianto-info, .impianto-info strong{color:#111 !important;}
     .canone-meter, .quote-actions, .mobile-bar, details.compare{display:none !important;}
     .product-pill{color:#7a5313; border-color:#c8871f; background:#fbedd3;}
+    .print-header{display:block !important; color:#333 !important;}
     .fiscal-card{border:1.5px solid #163b2e; box-shadow:none; break-inside:avoid; margin-top:16px;}
     .fiscal-card .iper-inputs{display:none !important;}
     .fiscal-card .iper-print-heading{display:block !important;}
@@ -844,6 +845,7 @@
      VERSION FOOTER & UPDATE NOTIFICATION
      ============================================================ */
   .version-footer{
+    display: none;
     margin-top: 32px;
     padding: 16px;
     border-top: 1px solid var(--line);
@@ -873,6 +875,17 @@
     font-size: 12px;
     color: #999;
     font-family: 'IBM Plex Mono', monospace;
+  }
+  
+  /* Print Header (visibile solo in stampa) */
+  .print-header{
+    display: none;
+    font-size: 12px;
+    color: #666;
+    font-family: 'IBM Plex Mono', monospace;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #ddd;
   }
   
   .check-update-btn{
@@ -1235,6 +1248,9 @@
     <!-- RESULT -->
     <div class="result-wrap">
       <section class="card result-card leasing-section">
+        <div class="print-header" id="print-header-leasing">
+          Calcolo basato su IRS e Euribor aggiornati al giorno <span id="print-date-leasing">2026-06-29 13:00</span>
+        </div>
         <div class="result-top">
           <div class="eyebrow">Quotazione stimata</div>
           <div class="product-pill">FTV · Fonti Verdi Mobiliari</div>
@@ -1525,6 +1541,12 @@
     if(META_VERSION !== 'sconosciuta'){
       const [date, time] = META_VERSION.split(' ');
       versionEl.textContent = `Calcolo basato su IRS e Euribor aggiornati al giorno ${date} ${time || ''}`.trim();
+      
+      // Aggiorna anche il print-header per il foglio di stampa
+      const printHeaderEl = document.getElementById('print-date-leasing');
+      if(printHeaderEl){
+        printHeaderEl.textContent = `${date} ${time || ''}`.trim();
+      }
     }
   }
   
@@ -1857,7 +1879,7 @@ La presente quotazione ha valore puramente indicativo ed è soggetta ad approvaz
   });
 
   el('btn-download-modulo').addEventListener('click', ()=>{
-    const pdfUrl = 'https://raw.githubusercontent.com/Gecomat26/Geco-Preventivatore-Unificato-GREEN/main/RICHIESTA_LEASING_DEF.pdf';
+    const pdfUrl = 'https://cdn.jsdelivr.net/gh/Gecomat26/Geco-Preventivatore-Unificato-GREEN/RICHIESTA_LEASING_DEF.pdf';
     const link = document.createElement('a');
     link.href = pdfUrl;
     link.download = 'RICHIESTA_LEASING_Alba_Leasing.pdf';
