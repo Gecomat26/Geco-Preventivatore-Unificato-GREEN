@@ -1973,10 +1973,13 @@ La presente quotazione ha valore puramente indicativo ed è soggetta ad approvaz
       let sumMin = 0, sumMax = 0;
       const dettagli = [];
       const cciAttivo = !!(cciField && cciField.checked);
+      let maxFTVPuro = 0; // Per mostrare la scomposizione
+      let maxBatteriaPura = 0; // Per mostrare la scomposizione batterie
 
       if (haPotenza){
         const r = findNearestRange(potenza, FTV_RANGES);
         let max = ftvMaxCaricabile(r);
+        maxFTVPuro = max; // Salva il max FTV prima del CCI
         if (cciAttivo) max += FTV_CCI_EXTRA;
         sumMin += r[2];
         sumMax += max;
@@ -1984,6 +1987,7 @@ La presente quotazione ha valore puramente indicativo ed è soggetta ad approvaz
       }
       if (haBatteria){
         const { min, max } = batteryRangeSum(batteria);
+        maxBatteriaPura = max; // Salva il max batteria per la scomposizione
         sumMin += min;
         sumMax += max;
         dettagli.push(`Batteria ${batteria} kW → range catalogo (${fmtEUR(min)} - ${fmtEUR(max)})`);
@@ -1998,15 +2002,27 @@ La presente quotazione ha valore puramente indicativo ed è soggetta ad approvaz
         return;
       }
 
+      // Calcola la scomposizione FTV + Accessori (10%)
+      const ftvAccessoriMax = haPotenza ? Math.round(maxFTVPuro * 0.9) : 0;
+      const ftvAccessoriPart = haPotenza ? Math.round(maxFTVPuro * 0.1) : 0;
+      const ftvScomposizione = haPotenza ? `<br><strong>MAX CARICABILE FTV: ${fmtEUR(maxFTVPuro)}</strong><br>├─ FTV (90%): ${fmtEUR(ftvAccessoriMax)}<br>└─ Accessori (10%): ${fmtEUR(ftvAccessoriPart)}` : '';
+      
+      // Calcola la scomposizione Batteria + Accessori (1%)
+      const batteriaAccessoriMax = haBatteria ? Math.round(maxBatteriaPura * 0.99) : 0;
+      const batteriaAccessoriPart = haBatteria ? Math.round(maxBatteriaPura * 0.01) : 0;
+      const batteriaScomposizione = haBatteria ? `<br><strong>MAX CARICABILE BATTERIA: ${fmtEUR(maxBatteriaPura)}</strong><br>├─ Batteria (99%): ${fmtEUR(batteriaAccessoriMax)}<br>└─ Accessori (1%): ${fmtEUR(batteriaAccessoriPart)}` : '';
+      
+      const scomposizione = ftvScomposizione + batteriaScomposizione;
+
       if (prezzo > sumMax){
         note.className = 'catalogo-note sopra';
-        note.innerHTML = `<strong>Il prezzo supera il range previsto dal catalogo</strong> (max ${fmtEUR(sumMax)}): è necessario sentire l'ufficio di Geco Finance.<br>${dettagli.join('<br>')}`;
+        note.innerHTML = `<strong>Il prezzo supera il range previsto dal catalogo</strong> (max ${fmtEUR(sumMax)}): è necessario sentire l'ufficio di Geco Finance.<br>${dettagli.join('<br>')}${scomposizione}`;
       } else if (prezzo < sumMin){
         note.className = 'catalogo-note sotto';
-        note.innerHTML = `<strong>Il prezzo è inferiore al range previsto dal catalogo</strong> (min ${fmtEUR(sumMin)}): verificare con l'ufficio di Geco Finance.<br>${dettagli.join('<br>')}`;
+        note.innerHTML = `<strong>Il prezzo è inferiore al range previsto dal catalogo</strong> (min ${fmtEUR(sumMin)}): verificare con l'ufficio di Geco Finance.<br>${dettagli.join('<br>')}${scomposizione}`;
       } else {
         note.className = 'catalogo-note ok';
-        note.innerHTML = `<strong>Il range è ok</strong> — il prezzo rientra nel catalogo (${fmtEUR(sumMin)} - ${fmtEUR(sumMax)}).<br>${dettagli.join('<br>')}`;
+        note.innerHTML = `<strong>Il range è ok</strong> — il prezzo rientra nel catalogo (${fmtEUR(sumMin)} - ${fmtEUR(sumMax)}).<br>${dettagli.join('<br>')}${scomposizione}`;
       }
     }
 
