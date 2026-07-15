@@ -241,6 +241,8 @@
   }
   @media (max-width: 640px){
     .field-grid{ grid-template-columns:1fr; }
+    .download-section{ margin-top:18px; padding:12px; }
+    .btn-download{ padding:11px 12px; font-size:13px; }
   }
   .field{display:flex; flex-direction:column; gap:6px;}
   .field.full{grid-column:1 / -1;}
@@ -685,6 +687,31 @@
     border:1px solid rgba(255,255,255,.25);
   }
   .btn-ghost:hover{background:rgba(255,255,255,.16);}
+
+  /* Download Section */
+  .download-section{
+    margin-top:24px;
+    padding:16px;
+    background:rgba(34, 168, 112, 0.08);
+    border:1px solid rgba(34, 168, 112, 0.25);
+    border-radius:9px;
+    text-align:center;
+  }
+  .btn-download{
+    background:#22a870;
+    color:#ffffff;
+    width:100%;
+    justify-content:center;
+    font-size:14px;
+    padding:13px 16px;
+  }
+  .btn-download:hover{filter:brightness(1.08);}
+  .download-hint{
+    margin-top:10px;
+    font-size:12px;
+    color:#8ab99a;
+    font-weight:500;
+  }
 
   .foot-note{
     margin-top:16px;
@@ -1234,6 +1261,13 @@
         <div class="quote-actions">
           <button class="btn btn-primary" id="btn-print">🖨️ Stampa quotazione</button>
           <button class="btn btn-ghost" id="btn-share">🔗 Copia riepilogo</button>
+        </div>
+
+        <div class="download-section">
+          <button class="btn btn-download" id="btn-download-modulo">
+            📥 Scarica Modulo Richiesta Leasing
+          </button>
+          <p class="download-hint">Documento da compilare e firmare</p>
         </div>
 
         <p class="foot-note">Simulazione indicativa basata sui parametri correnti per il prodotto FTV (Beni Fonti Verdi Mobiliari). Non costituisce offerta contrattuale.</p>
@@ -1820,6 +1854,16 @@ La presente quotazione ha valore puramente indicativo ed è soggetta ad approvaz
     }catch(e){
       alert(testo);
     }
+  });
+
+  el('btn-download-modulo').addEventListener('click', ()=>{
+    const pdfUrl = 'https://raw.githubusercontent.com/Gecomat26/Geco-Preventivatore-Unificato-GREEN/main/RICHIESTA_LEASING_DEF.pdf';
+    const link = document.createElement('a');
+    link.href = pdfUrl;
+    link.download = 'RICHIESTA_LEASING_Alba_Leasing.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   });
 
   calcola();
