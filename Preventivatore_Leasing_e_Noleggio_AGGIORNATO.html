@@ -128,8 +128,8 @@
     margin:18px auto 0;
     padding:0 20px;
     display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
+    grid-template-columns:1.15fr 1fr;
+    gap:24px;
   }
   @media (max-width:560px){
     .mode-switch{grid-template-columns:1fr;}
@@ -968,7 +968,33 @@
     background: #d1d5db;
   }
   
+  .disclaimer{
+    background:transparent;
+    border:1px solid rgba(199,216,205,.45);
+    border-radius:6px;
+    padding:10px 16px;
+    margin:12px auto;
+    max-width:1120px;
+    font-size:11px;
+    line-height:1.5;
+    color:#8b9299;
+    text-align:left;
+    word-wrap:break-word;
+    overflow-wrap:break-word;
+  }
+  
+  .disclaimer .disclaimer-title{
+    color:#000000;
+    font-weight:700;
+  }
+  
   @media (max-width: 768px) {
+    .disclaimer{
+      margin:10px 16px;
+      padding:7px 12px;
+      font-size:10.5px;
+    }
+  }
     .update-notification{
       bottom: 16px;
       right: 12px;
@@ -1001,6 +1027,10 @@
   <p class="subtitle" id="page-subtitle">Calcola in tempo reale il canone per il prodotto FTV (Beni Fonti Verdi Mobiliari) e condividi la quotazione con il cliente.</p>
   <span class="rate-note"><span class="dot"></span> <span id="rate-note-text">Parametri di tasso aggiornati al 28/05/2026</span></span>
 </header>
+
+<div class="disclaimer">
+  <span class="disclaimer-title">Disclaimer:</span> Il presente tool è ad uso esclusivo dei destinatari autorizzati da Geco Finance. È vietata la diffusione, copia, pubblicazione o condivisione a soggetti terzi non autorizzati. I dati sono confidenziali e i calcoli hanno valore indicativo non vincolante.
+</div>
 
 <div class="mode-switch" id="mode-switch">
   <button type="button" class="mode-card active" data-mode="leasing">
@@ -1756,17 +1786,40 @@
   function formatImportoInput(n){
     return Math.round(n).toLocaleString('it-IT', {useGrouping:true});
   }
+  
+  function updateDurataAvailability(){
+    const importo = parseImporto(el('imponibile').value);
+    const durataSelect = el('durata');
+    const option7anni = Array.from(durataSelect.options).find(opt => opt.value === '7');
+    
+    if (importo > 149999) {
+      // Disabilita 7 anni per importi > 149.999 euro
+      if (option7anni) option7anni.disabled = true;
+      // Se è selezionato 7 anni, cambia a 6 anni
+      if (durataSelect.value === '7') {
+        durataSelect.value = '6';
+      }
+    } else {
+      // Abilita 7 anni per importi <= 149.999 euro
+      if (option7anni) option7anni.disabled = false;
+    }
+  }
+  
   const importoField = el('imponibile');
   importoField.addEventListener('input', ()=>{
     const raw = parseImporto(importoField.value);
     const formatted = formatImportoInput(raw);
     importoField.value = formatted;
     importoField.setSelectionRange(formatted.length, formatted.length);
+    updateDurataAvailability();
     calcola();
   });
   importoField.addEventListener('blur', ()=>{
     importoField.value = formatImportoInput(parseImporto(importoField.value));
   });
+  
+  // Inizializza al caricamento
+  updateDurataAvailability();
 
   const periodLabel = { '12':'/ mese', '6':'/ bimestre', '4':'/ trimestre' };
 
