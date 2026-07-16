@@ -1456,7 +1456,7 @@
           <div class="breakdown-row"><span class="k">Numero canoni</span><span class="v" id="loc-out-ncanoni">–</span></div>
           <div class="breakdown-row totale-spesa-hidden"><span class="k">Totale spesa cliente</span><span class="v" id="loc-out-totale">–</span></div>
           <div class="breakdown-row"><span class="k">Spese di istruttoria</span><span class="v small" id="loc-out-istruttoria">–</span></div>
-          <div class="breakdown-row"><span class="k">Riacquisto fornitore (1%)</span><span class="v small" id="loc-out-riacquisto">–</span></div>
+          <div class="breakdown-row"><span class="k">Riacquisto</span><span class="v small" id="loc-out-riacquisto">–</span></div>
           <div class="breakdown-row"><span class="k">Spese di incasso</span><span class="v small" id="loc-out-incasso">Nessuna</span></div>
           <div class="breakdown-row"><span class="k">Assicurazione</span><span class="v small">All Risk inclusa nei canoni, a cura e carico dell'ente concedente</span></div>
         </div>
@@ -2511,7 +2511,7 @@ La presente quotazione ha valore puramente indicativo ed è soggetta ad approvaz
     el('loc-out-ncanoni').textContent = featured.numCanoni;
     el('loc-out-totale').textContent = fmtEUR(featured.totale);
     el('loc-out-istruttoria').textContent = setup === 0 ? 'Nessuna' : fmtEUR(setup);
-    el('loc-out-riacquisto').textContent = fmtEUR(buyback) + ' + IVA';
+    el('loc-out-riacquisto').textContent = 'A fine locazione il cliente riacquista il bene dal fornitore.';
 
     el('loc-table-body').innerHTML = rows.map(r => `
       <tr class="${r.m === selectedDuration ? 'row-active' : ''}" data-val="${r.m}">
@@ -2553,7 +2553,7 @@ Canone: ${el('loc-out-rata').textContent} ${el('loc-out-periodo').textContent}
 Numero canoni: ${el('loc-out-ncanoni').textContent}
 Totale spesa cliente: ${el('loc-out-totale').textContent}
 Spese di istruttoria: ${el('loc-out-istruttoria').textContent}
-Riacquisto fornitore: ${el('loc-out-riacquisto').textContent}
+Riacquisto: ${el('loc-out-riacquisto').textContent}
 Assicurazione: All Risk inclusa nei canoni, a cura della società concedente.
 
 La presente quotazione ha valore puramente indicativo ed è soggetta ad approvazione da parte della società concedente.`;
