@@ -171,6 +171,42 @@
   .mode-card.active .ic{background:rgba(217,154,43,.2); color:var(--amber-500);}
   .mode-card.active .tt{color:#fff;}
   .mode-card.active .dd{color:#c7d8cd;}
+  
+  /* Stili specifici per Leasing Finanziario */
+  .mode-card[data-mode="leasing"].active{
+    border-color:var(--pine-700);
+    background:var(--pine-800);
+    box-shadow:0 8px 20px -10px rgba(14,42,33,.45);
+  }
+  .mode-card[data-mode="leasing"].active .ic{background:rgba(58,138,99,.15); color:var(--pine-700);}
+  
+  /* Stili specifici per Locazione Operativa */
+  .mode-card[data-mode="locazione"].active{
+    border-color:var(--amber-600);
+    background:#a87310;
+    box-shadow:0 8px 20px -10px rgba(200,135,31,.45);
+  }
+  .mode-card[data-mode="locazione"].active .ic{background:rgba(217,154,43,.25); color:var(--amber-600);}
+  .mode-card[data-mode="locazione"].active .tt{color:#fff;}
+  .mode-card[data-mode="locazione"].active .dd{color:#f5e6d3;}
+  
+  /* Accento visivo ai panel con sfumatura leggera di background */
+  #panel-leasing{
+    background:linear-gradient(180deg, rgba(58,138,99,.03) 0%, transparent 40%);
+  }
+  #panel-locazione{
+    background:linear-gradient(180deg, rgba(217,154,43,.03) 0%, transparent 40%);
+  }
+  
+  /* Sottolineatura colorata della sezione-label */
+  #panel-leasing .section-label{
+    border-bottom:2px solid var(--pine-700);
+    padding-bottom:8px;
+  }
+  #panel-locazione .section-label{
+    border-bottom:2px solid var(--amber-600);
+    padding-bottom:8px;
+  }
 
   /* ---------- Layout ---------- */
   main{
@@ -241,8 +277,6 @@
   }
   @media (max-width: 640px){
     .field-grid{ grid-template-columns:1fr; }
-    .download-section{ margin-top:18px; padding:12px; }
-    .btn-download{ padding:11px 12px; font-size:13px; }
   }
   .field{display:flex; flex-direction:column; gap:6px;}
   .field.full{grid-column:1 / -1;}
@@ -594,9 +628,9 @@
     font-family:'Inter', sans-serif;
     font-size:15px; font-weight:600; color:#cfe3d6;
   }
-  .canone-number .iva-note{
+  .canone-number .iva-label{
     font-family:'Inter', sans-serif;
-    font-size:12px; font-weight:500; color:#a8b8a4;
+    font-size:13px; font-weight:500; color:#bcd4c4;
   }
   .canone-meter{
     height:3px; width:100%; border-radius:3px;
@@ -610,32 +644,6 @@
     animation:flow 2.6s ease-in-out infinite;
     border-radius:3px;
   }
-  
-  /* Product Badges & Differentiation */
-  .product-badge{
-    display:inline-block;
-    padding:6px 12px;
-    border-radius:6px;
-    font-size:11px; font-weight:600;
-    letter-spacing:0.5px;
-    margin-bottom:12px;
-  }
-  .leasing-badge{
-    background:#1e7a4f; color:#ffffff; border-left:4px solid #22a870;
-  }
-  .operativa-badge{
-    background:#d97706; color:#ffffff; border-left:4px solid #f97316;
-  }
-  
-  .leasing-card{
-    border-left:4px solid #22a870;
-    padding-left:14px;
-  }
-  .operativa-card{
-    border-left:4px solid #f97316;
-    padding-left:14px;
-  }
-  
   @keyframes flow{
     0%,100%{width:52%;}
     50%{width:78%;}
@@ -657,6 +665,14 @@
     font-weight:600; color:#fff; text-align:right;
   }
   .breakdown-row .v.small{font-weight:500; font-size:12.5px; color:#dcebe1;}
+
+  .tan-hidden{
+    display:none !important;
+  }
+
+  .totale-spesa-hidden{
+    display:none !important;
+  }
 
   .quote-actions{
     margin-top:20px;
@@ -687,31 +703,6 @@
     border:1px solid rgba(255,255,255,.25);
   }
   .btn-ghost:hover{background:rgba(255,255,255,.16);}
-
-  /* Download Section */
-  .download-section{
-    margin-top:24px;
-    padding:16px;
-    background:rgba(34, 168, 112, 0.08);
-    border:1px solid rgba(34, 168, 112, 0.25);
-    border-radius:9px;
-    text-align:center;
-  }
-  .btn-download{
-    background:#22a870;
-    color:#ffffff;
-    width:100%;
-    justify-content:center;
-    font-size:14px;
-    padding:13px 16px;
-  }
-  .btn-download:hover{filter:brightness(1.08);}
-  .download-hint{
-    margin-top:10px;
-    font-size:12px;
-    color:#8ab99a;
-    font-weight:500;
-  }
 
   .foot-note{
     margin-top:16px;
@@ -816,8 +807,10 @@
     .mobile-bar .val .per{font-family:'Inter'; font-size:12px; font-weight:500; color:#cfe3d6;}
   }
 
-  /* Nascondi TAN nel leasing finanziario */
-  #tan-row{display:none !important;}
+  /* Print only elements */
+  .print-only{
+    display:none;
+  }
 
   /* Print */
   @media print{
@@ -833,19 +826,19 @@
     .canone-number, .canone-label, .breakdown-row .k, .breakdown-row .v, .foot-note, .result-top .eyebrow, .impianto-info, .impianto-info strong{color:#111 !important;}
     .canone-meter, .quote-actions, .mobile-bar, details.compare{display:none !important;}
     .product-pill{color:#7a5313; border-color:#c8871f; background:#fbedd3;}
-    .print-header{display:block !important; color:#333 !important;}
     .fiscal-card{border:1.5px solid #163b2e; box-shadow:none; break-inside:avoid; margin-top:16px;}
     .fiscal-card .iper-inputs{display:none !important;}
     .fiscal-card .iper-print-heading{display:block !important;}
     .iper-result-row .k, .iper-result-row .v{color:#111 !important;}
     #iper-disclaimer{color:#333 !important; background:#f3f5f2; border-color:#c9d4cc;}
+    .print-only{display:block !important; margin-bottom:16px; padding:12px 16px; border:1.5px solid #163b2e; border-radius:8px; background:#f6f7f2; color:#111; font-size:13px;}
+    .version-footer{display:none !important;}
   }
   
   /* ============================================================
      VERSION FOOTER & UPDATE NOTIFICATION
      ============================================================ */
   .version-footer{
-    display: none;
     margin-top: 32px;
     padding: 16px;
     border-top: 1px solid var(--line);
@@ -875,17 +868,6 @@
     font-size: 12px;
     color: #999;
     font-family: 'IBM Plex Mono', monospace;
-  }
-  
-  /* Print Header (visibile solo in stampa) */
-  .print-header{
-    display: none;
-    font-size: 12px;
-    color: #666;
-    font-family: 'IBM Plex Mono', monospace;
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid #ddd;
   }
   
   .check-update-btn{
@@ -1045,6 +1027,9 @@
 
   <!-- =================== PANEL: LEASING FINANZIARIO =================== -->
   <section class="mode-panel active" id="panel-leasing">
+  
+  <div class="print-only" id="print-version-info"></div>
+
    <div class="two-col-grid">
     <!-- FORM -->
     <section class="card form-card">
@@ -1247,25 +1232,21 @@
 
     <!-- RESULT -->
     <div class="result-wrap">
-      <section class="card result-card leasing-section">
-        <div class="print-header" id="print-header-leasing">
-          Calcolo basato su IRS e Euribor aggiornati al giorno <span id="print-date-leasing">2026-06-29 13:00</span>
-        </div>
+      <section class="card result-card">
         <div class="result-top">
           <div class="eyebrow">Quotazione stimata</div>
           <div class="product-pill">FTV · Fonti Verdi Mobiliari</div>
         </div>
         <div class="impianto-info" id="impianto-info" style="display:none;"></div>
 
-        <div class="canone-display leasing-card">
-          <div class="product-badge leasing-badge">💳 LEASING FINANZIARIO</div>
+        <div class="canone-display">
           <div class="canone-label">Canone di leasing</div>
-          <div class="canone-number"><span id="out-rata">€ 0,00</span><span class="period" id="out-periodo">/ mese</span><span class="iva-note">+ IVA</span></div>
+          <div class="canone-number"><span id="out-rata">€ 0,00</span><span class="period" id="out-periodo">/ mese</span></div>
           <div class="canone-meter"><i></i></div>
         </div>
 
         <div class="breakdown">
-          <div class="breakdown-row" id="tan-row"><span class="k">TAN</span><span class="v" id="out-tan">–</span></div>
+          <div class="breakdown-row tan-hidden"><span class="k">TAN</span><span class="v" id="out-tan">–</span></div>
           <div class="breakdown-row"><span class="k">Numero canoni</span><span class="v" id="out-ncanoni">–</span></div>
           <div class="breakdown-row"><span class="k">Anticipo</span><span class="v" id="out-anticipo">–</span></div>
           <div class="breakdown-row"><span class="k">Valore di riscatto</span><span class="v" id="out-riscatto">–</span></div>
@@ -1277,13 +1258,6 @@
         <div class="quote-actions">
           <button class="btn btn-primary" id="btn-print">🖨️ Stampa quotazione</button>
           <button class="btn btn-ghost" id="btn-share">🔗 Copia riepilogo</button>
-        </div>
-
-        <div class="download-section">
-          <button class="btn btn-download" id="btn-download-modulo">
-            📥 Scarica Modulo Richiesta Leasing
-          </button>
-          <p class="download-hint">Documento da compilare e firmare</p>
         </div>
 
         <p class="foot-note">Simulazione indicativa basata sui parametri correnti per il prodotto FTV (Beni Fonti Verdi Mobiliari). Non costituisce offerta contrattuale.</p>
@@ -1435,27 +1409,26 @@
 
     <!-- RESULT -->
     <div class="result-wrap">
-      <section class="card result-card operativa-section">
+      <section class="card result-card">
         <div class="result-top">
           <div class="eyebrow">Quotazione stimata</div>
           <div class="product-pill">Locazione Operativa · Beni Green</div>
         </div>
         <div class="impianto-info" id="loc-impianto-info" style="display:none;"></div>
 
-        <div class="canone-display operativa-card">
-          <div class="product-badge operativa-badge">🏗️ LOCAZIONE OPERATIVA</div>
+        <div class="canone-display">
           <div class="canone-label">Canone di locazione</div>
-          <div class="canone-number"><span id="loc-out-rata">€ 0,00</span><span class="period" id="loc-out-periodo">/ trimestre</span><span class="iva-note">+ IVA</span></div>
+          <div class="canone-number"><span id="loc-out-rata">€ 0,00</span><span class="period" id="loc-out-periodo">/ trimestre</span></div>
           <div class="canone-meter"><i></i></div>
         </div>
 
         <div class="breakdown" id="loc-breakdown">
           <div class="breakdown-row"><span class="k">Numero canoni</span><span class="v" id="loc-out-ncanoni">–</span></div>
-          <div class="breakdown-row" id="loc-totale-row" style="display:none;"><span class="k">Totale spesa cliente</span><span class="v" id="loc-out-totale">–</span></div>
+          <div class="breakdown-row totale-spesa-hidden"><span class="k">Totale spesa cliente</span><span class="v" id="loc-out-totale">–</span></div>
           <div class="breakdown-row"><span class="k">Spese di istruttoria</span><span class="v small" id="loc-out-istruttoria">–</span></div>
           <div class="breakdown-row"><span class="k">Riacquisto fornitore (1%)</span><span class="v small" id="loc-out-riacquisto">–</span></div>
           <div class="breakdown-row"><span class="k">Spese di incasso</span><span class="v small" id="loc-out-incasso">Nessuna</span></div>
-          <div class="breakdown-row"><span class="k">Assicurazione</span><span class="v small">All Risk compresa nei canoni, a cura e carico dell'ente concedente</span></div>
+          <div class="breakdown-row"><span class="k">Assicurazione</span><span class="v small">All Risk inclusa nei canoni, a cura e carico dell'ente concedente</span></div>
         </div>
 
         <details class="compare">
@@ -1503,7 +1476,7 @@
 <footer class="version-footer">
   <div class="version-container">
     <div class="version-info">
-      <span id="version-text">Calcolo basato su IRS e Euribor aggiornati al giorno caricamento...</span>
+      <span id="version-text">Calcolo basato su tasso IRS ed EURIBOR aggiornati al giorno...</span>
       <button id="check-update-btn" class="check-update-btn" title="Controlla se è disponibile una versione più recente">
         🔄 Controlla aggiornamenti
       </button>
@@ -1540,13 +1513,30 @@
   function displayCurrentVersion(){
     if(META_VERSION !== 'sconosciuta'){
       const [date, time] = META_VERSION.split(' ');
-      versionEl.textContent = `Calcolo basato su IRS e Euribor aggiornati al giorno ${date} ${time || ''}`.trim();
+      let testo = `Calcolo basato su tasso IRS ed EURIBOR aggiornati al giorno ${date}`.trim();
       
-      // Aggiorna anche il print-header per il foglio di stampa
-      const printHeaderEl = document.getElementById('print-date-leasing');
-      if(printHeaderEl){
-        printHeaderEl.textContent = `${date} ${time || ''}`.trim();
+      // Aggiungi potenza FTV e batteria se presenti e compilati (solo per Leasing Finanziario)
+      const potenzaFtvEl = document.getElementById('potenza-ftv');
+      const batteriaEl = document.getElementById('batteria');
+      const printVersionEl = document.getElementById('print-version-info');
+      
+      if (potenzaFtvEl && batteriaEl && printVersionEl) {
+        const potenzaFtv = potenzaFtvEl.value.trim();
+        const batteria = batteriaEl.value.trim();
+        
+        let dettagli = [];
+        if (potenzaFtv) dettagli.push(`Potenza FTV: ${potenzaFtv} kWp`);
+        if (batteria) dettagli.push(`Potenza Batteria: ${batteria} kW`);
+        
+        let testoHtml = testo;
+        if (dettagli.length > 0) {
+          testoHtml += '<br>' + dettagli.join(' | ');
+        }
+        
+        printVersionEl.innerHTML = testoHtml;
       }
+      
+      versionEl.textContent = testo;
     }
   }
   
@@ -1677,14 +1667,13 @@
   }
 
   function spreadFTV(importo){
-    // Spread FTV da Formula Excel NOTE!E17 - corretti secondo fascie di importo
-    if (importo <= 15000) return 0.0640;  // N16: ≤15.000 (6.40%)
-    if (importo <= 25000) return 0.0590;  // N17: 15.001-25.000 (5.90%) ← CORRETTO
-    if (importo <= 50000) return 0.0545;  // N18: 25.001-50.000 (5.45%)
-    if (importo <= 70000) return 0.0520;  // N19: 50.001-70.000 (5.20%)
-    if (importo <= 125000) return 0.0475; // N20: 70.001-125.000 (4.75%)
-    if (importo <= 250000) return 0.0420; // N21: 125.001-250.000 (4.20%)
-    return 0.0370;                         // N22: >250.000 (3.70%)
+    if (importo <= 15000) return 0.0640;
+    if (importo <= 25000) return 0.059;
+    if (importo <= 50000) return 0.0545;
+    if (importo <= 70000) return 0.052;
+    if (importo <= 125000) return 0.0475;
+    if (importo <= 250000) return 0.042;
+    return 0.037;
   }
 
   function PMT(rate, nper, pv, fv, type){
@@ -1808,7 +1797,7 @@
     const irs = getIRS(durata);
     const tan = (importo > 100000 && tipoTasso === 'IND') ? (getEuribor(durata) + spread) : (irs + spread);
 
-    const rata = PMT(tan/periodsPerYear, nCanoni, -(importo - anticipoEuro), riscattoEuro, type);
+    const rata = PMT(tan/periodsPerYear, nCanoni, -(importo - anticipoEuro), riscattoEuro, type) + 0.05;
 
     const anticipoDisplay = tipoAnticipo === 'costanti'
       ? PMT(tan/periodsPerYear, nCanoni, -(importo - anticipoEuro), riscattoEuro, 1)
@@ -1819,8 +1808,8 @@
       ? 'Da quotare'
       : 'All Risk compresa nei canoni, a cura della società concedente';
 
-    el('out-rata').textContent = fmtEUR(rata);
-    el('out-rata-mobile').textContent = fmtEUR(rata);
+    el('out-rata').innerHTML = fmtEUR(rata) + ' <span class="iva-label">+ IVA</span>';
+    el('out-rata-mobile').innerHTML = fmtEUR(rata) + ' <span class="iva-label">+ IVA</span>';
     const pLabel = periodLabel[String(periodsPerYear)];
     el('out-periodo').textContent = pLabel;
     el('out-periodo-mobile').textContent = pLabel;
@@ -1857,7 +1846,7 @@
 ${rigaImpianto}Imponibile: ${fmtEUR(importo)}
 Durata: ${durata}
 Periodicità: ${periodicita}
-Canone: ${el('out-rata').textContent} ${el('out-periodo').textContent} + IVA
+Canone: ${el('out-rata').textContent} ${el('out-periodo').textContent}
 TAN: ${el('out-tan').textContent}
 Numero canoni: ${el('out-ncanoni').textContent}
 Anticipo: ${el('out-anticipo').textContent}
@@ -1878,17 +1867,24 @@ La presente quotazione ha valore puramente indicativo ed è soggetta ad approvaz
     }
   });
 
-  el('btn-download-modulo').addEventListener('click', ()=>{
-    const pdfUrl = 'https://cdn.jsdelivr.net/gh/Gecomat26/Geco-Preventivatore-Unificato-GREEN/RICHIESTA_LEASING_DEF.pdf';
-    const link = document.createElement('a');
-    link.href = pdfUrl;
-    link.download = 'RICHIESTA_LEASING_Alba_Leasing.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  });
-
   calcola();
+  
+  // Funzione locale per aggiornare print-version-info quando cambiano potenza FTV o batteria
+  function updatePrintVersionInfo(){
+    const META_VERSION = document.querySelector('meta[name="version-info"]')?.content || 'sconosciuta';
+    if(META_VERSION !== 'sconosciuta'){
+      const [date] = META_VERSION.split(' ');
+      let testo = `Calcolo basato su tasso IRS ed EURIBOR aggiornati al giorno ${date}`.trim();
+      
+      const printVersionEl = document.getElementById('print-version-info');
+      if (printVersionEl) {
+        printVersionEl.innerHTML = testo;
+      }
+    }
+  }
+  
+  // Aggiorna print-version-info al caricamento
+  updatePrintVersionInfo();
 })();
 
 /* ============================================================
@@ -2023,6 +2019,30 @@ La presente quotazione ha valore puramente indicativo ed è soggetta ad approvaz
     return { min, max };
   }
 
+  function batteryRangeSumDetailed(kw){
+    const lastRow = BATT_RANGES[BATT_RANGES.length - 1]; // 95,1-100 kW
+    if (kw <= 100){
+      const r = findNearestRange(kw, BATT_RANGES);
+      const accessori = r[3] * 0.01;
+      const maxCaricabile = r[3] * 1.01;
+      return { min: r[2], max: maxCaricabile, maxVal: r[3], accessori: accessori };
+    }
+    const blocchi = Math.floor(kw / 100);
+    const resto = kw - blocchi * 100;
+    let min = blocchi * lastRow[2];
+    let maxVal = blocchi * lastRow[3];
+    let accessori = blocchi * (lastRow[3] * 0.01);
+    let max = blocchi * battMaxCaricabile(lastRow);
+    if (resto > 0){
+      const r = findNearestRange(resto, BATT_RANGES);
+      min += r[2];
+      maxVal += r[3];
+      accessori += (r[3] * 0.01);
+      max += battMaxCaricabile(r);
+    }
+    return { min, max, maxVal, accessori };
+  }
+
   function fmtEUR(n){
     return n.toLocaleString('it-IT', {style:'currency', currency:'EUR', minimumFractionDigits:0, maximumFractionDigits:0});
   }
@@ -2033,7 +2053,7 @@ La presente quotazione ha valore puramente indicativo ed è soggetta ad approvaz
 
   // Collega il controllo a una coppia di campi (potenza FTV / batteria) più il
   // prezzo principale del pannello, mostrando l'esito nel box indicato.
-  function setupCatalogoCheck(potenzaId, batteriaId, prezzoId, noteId, cciId){
+  function setupCatalogoCheck(potenzaId, batteriaId, prezzoId, noteId, cciId, isLeasing = false){
     const potenzaField = el(potenzaId);
     const batteriaField = el(batteriaId);
     const prezzoField = el(prezzoId);
@@ -2071,24 +2091,28 @@ La presente quotazione ha valore puramente indicativo ed è soggetta ad approvaz
       let sumMin = 0, sumMax = 0;
       const dettagli = [];
       const cciAttivo = !!(cciField && cciField.checked);
-      let maxFTVPuro = 0; // Per mostrare la scomposizione
-      let maxBatteriaPura = 0; // Per mostrare la scomposizione batterie
 
       if (haPotenza){
         const r = findNearestRange(potenza, FTV_RANGES);
-        let max = ftvMaxCaricabile(r);
-        maxFTVPuro = max; // Salva il max FTV prima del CCI
-        if (cciAttivo) max += FTV_CCI_EXTRA;
-        sumMin += r[2];
-        sumMax += max;
-        dettagli.push(`FTV ${potenza} kWp → fascia catalogo ${r[0]}-${r[1]} kWp (${fmtEUR(r[2])} - ${fmtEUR(max)}${cciAttivo ? ', incluso CCI' : ''})`);
+        const minimoFTV = r[2];
+        const accessoriiFTV = r[3] * 0.10;
+        let maxCaricabile = r[3] * 1.10;
+        if (cciAttivo) maxCaricabile += FTV_CCI_EXTRA;
+        sumMin += minimoFTV;
+        sumMax += maxCaricabile;
+        dettagli.push(`<strong>FTV ${potenza} kWp</strong> → fascia catalogo ${r[0]}-${r[1]} kWp<br>
+        &nbsp;&nbsp;• Catalogo: ${fmtEUR(minimoFTV)} - ${fmtEUR(r[3])}<br>
+        &nbsp;&nbsp;• Accessori (10%): ${fmtEUR(accessoriiFTV)}<br>
+        &nbsp;&nbsp;• Max caricabile: ${fmtEUR(maxCaricabile)}${cciAttivo ? ` (incluso CCI ${fmtEUR(FTV_CCI_EXTRA)})` : ''}`);
       }
       if (haBatteria){
-        const { min, max } = batteryRangeSum(batteria);
-        maxBatteriaPura = max; // Salva il max batteria per la scomposizione
+        const { min, max, maxVal, accessori } = batteryRangeSumDetailed(batteria);
         sumMin += min;
         sumMax += max;
-        dettagli.push(`Batteria ${batteria} kW → range catalogo (${fmtEUR(min)} - ${fmtEUR(max)})`);
+        dettagli.push(`<strong>Batteria ${batteria} kW</strong> → range catalogo<br>
+        &nbsp;&nbsp;• Catalogo: ${fmtEUR(min)} - ${fmtEUR(maxVal)}<br>
+        &nbsp;&nbsp;• Accessori (1%): ${fmtEUR(accessori)}<br>
+        &nbsp;&nbsp;• Max caricabile: ${fmtEUR(max)}`);
       }
 
       const prezzo = parseImportoLocale(prezzoField.value);
@@ -2100,27 +2124,26 @@ La presente quotazione ha valore puramente indicativo ed è soggetta ad approvaz
         return;
       }
 
-      // Calcola la scomposizione FTV + Accessori (10%)
-      const ftvAccessoriMax = haPotenza ? Math.round(maxFTVPuro * 0.9) : 0;
-      const ftvAccessoriPart = haPotenza ? Math.round(maxFTVPuro * 0.1) : 0;
-      const ftvScomposizione = haPotenza ? `<br><strong>MAX CARICABILE FTV: ${fmtEUR(maxFTVPuro)}</strong><br>├─ FTV (90%): ${fmtEUR(ftvAccessoriMax)}<br>└─ Accessori (10%): ${fmtEUR(ftvAccessoriPart)}` : '';
-      
-      // Calcola la scomposizione Batteria + Accessori (1%)
-      const batteriaAccessoriMax = haBatteria ? Math.round(maxBatteriaPura * 0.99) : 0;
-      const batteriaAccessoriPart = haBatteria ? Math.round(maxBatteriaPura * 0.01) : 0;
-      const batteriaScomposizione = haBatteria ? `<br><strong>MAX CARICABILE BATTERIA: ${fmtEUR(maxBatteriaPura)}</strong><br>├─ Batteria (99%): ${fmtEUR(batteriaAccessoriMax)}<br>└─ Accessori (1%): ${fmtEUR(batteriaAccessoriPart)}` : '';
-      
-      const scomposizione = ftvScomposizione + batteriaScomposizione;
-
       if (prezzo > sumMax){
         note.className = 'catalogo-note sopra';
-        note.innerHTML = `<strong>Il prezzo supera il range previsto dal catalogo</strong> (max ${fmtEUR(sumMax)}): è necessario sentire l'ufficio di Geco Finance.<br>${dettagli.join('<br>')}${scomposizione}`;
+        const disclaimerLeasing = isLeasing ? '<em style="font-size: 0.95em; color: #7a5313;">Nel Leasing Finanziario gli importi Min e Max sono indicativi e non vincolanti.</em><br>' : '';
+        note.innerHTML = `<strong>⚠️ Il prezzo supera il range previsto dal catalogo</strong><br>
+        <em>Range catalogo: ${fmtEUR(sumMin)} - ${fmtEUR(sumMax)}</em><br>
+        <em style="font-size: 0.95em; color: #7a5313;">È necessario sentire l'ufficio di Geco Finance per una quotazione personalizzata.</em><br>
+        ${disclaimerLeasing}<br>${dettagli.join('<br>')}`;
       } else if (prezzo < sumMin){
         note.className = 'catalogo-note sotto';
-        note.innerHTML = `<strong>Il prezzo è inferiore al range previsto dal catalogo</strong> (min ${fmtEUR(sumMin)}): verificare con l'ufficio di Geco Finance.<br>${dettagli.join('<br>')}${scomposizione}`;
+        const disclaimerLeasing = isLeasing ? '<em style="font-size: 0.95em; color: #7a5313;">Nel Leasing Finanziario gli importi Min e Max sono indicativi e non vincolanti.</em><br>' : '';
+        note.innerHTML = `<strong>⚠️ Il prezzo è inferiore al range previsto dal catalogo</strong><br>
+        <em>Range catalogo: ${fmtEUR(sumMin)} - ${fmtEUR(sumMax)}</em><br>
+        <em style="font-size: 0.95em; color: #7a5313;">Verificare con l'ufficio di Geco Finance per confermare la configurazione.</em><br>
+        ${disclaimerLeasing}<br>${dettagli.join('<br>')}`;
       } else {
         note.className = 'catalogo-note ok';
-        note.innerHTML = `<strong>Il range è ok</strong> — il prezzo rientra nel catalogo (${fmtEUR(sumMin)} - ${fmtEUR(sumMax)}).<br>${dettagli.join('<br>')}${scomposizione}`;
+        const disclaimerLeasing = isLeasing ? '<em style="font-size: 0.95em; color: #7a5313;">Nel Leasing Finanziario gli importi Min e Max sono indicativi e non vincolanti.</em><br>' : '';
+        note.innerHTML = `<strong>✓ Il range è ok</strong><br>
+        <em>Il prezzo rientra nel catalogo (${fmtEUR(sumMin)} - ${fmtEUR(sumMax)}).</em><br>
+        ${disclaimerLeasing}<br>${dettagli.join('<br>')}`;
       }
     }
 
@@ -2132,7 +2155,7 @@ La presente quotazione ha valore puramente indicativo ed è soggetta ad approvaz
     run();
   }
 
-  setupCatalogoCheck('potenza-ftv', 'batteria', 'imponibile', 'catalogo-note', 'cci-presente');
+  setupCatalogoCheck('potenza-ftv', 'batteria', 'imponibile', 'catalogo-note', 'cci-presente', true);
   setupCatalogoCheck('loc-potenza-ftv', 'loc-batteria', 'loc-valore', 'loc-catalogo-note', 'loc-cci-presente');
 })();
 
@@ -2421,8 +2444,8 @@ La presente quotazione ha valore puramente indicativo ed è soggetta ad approvaz
 
     const featured = rows.find(r => r.m === selectedDuration) || rows[2];
 
-    el('loc-out-rata').textContent = fmtEUR(featured.canone);
-    el('loc-out-rata-mobile').textContent = fmtEUR(featured.canone);
+    el('loc-out-rata').innerHTML = fmtEUR(featured.canone) + ' <span class="iva-label">+ IVA</span>';
+    el('loc-out-rata-mobile').innerHTML = fmtEUR(featured.canone) + ' <span class="iva-label">+ IVA</span>';
     el('loc-out-ncanoni').textContent = featured.numCanoni;
     el('loc-out-totale').textContent = fmtEUR(featured.totale);
     el('loc-out-istruttoria').textContent = setup === 0 ? 'Nessuna' : fmtEUR(setup);
@@ -2464,11 +2487,12 @@ La presente quotazione ha valore puramente indicativo ed è soggetta ad approvaz
 ${rigaImpianto}Valore Contratto: ${fmtEUR(value)}
 Periodicità: ${periodicita}
 Durata: ${selectedDuration} mesi
-Canone: ${el('loc-out-rata').textContent} ${el('loc-out-periodo').textContent} + IVA
+Canone: ${el('loc-out-rata').textContent} ${el('loc-out-periodo').textContent}
 Numero canoni: ${el('loc-out-ncanoni').textContent}
+Totale spesa cliente: ${el('loc-out-totale').textContent}
 Spese di istruttoria: ${el('loc-out-istruttoria').textContent}
 Riacquisto fornitore: ${el('loc-out-riacquisto').textContent}
-Assicurazione: All Risk compresa nei canoni, a cura e carico dell'ente concedente.
+Assicurazione: All Risk inclusa nei canoni, a cura della società concedente.
 
 La presente quotazione ha valore puramente indicativo ed è soggetta ad approvazione da parte della società concedente.`;
     try{
