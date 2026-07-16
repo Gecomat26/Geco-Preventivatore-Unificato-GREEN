@@ -1832,6 +1832,15 @@
 
     const warn = el('warn-importo');
     if (importo < 15000.01){
+      warn.textContent = 'Il prodotto FTV è disponibile per importi da € 15.000,01. Inserisci un imponibile superiore.';
+      warn.classList.add('show');
+      ['out-rata','out-rata-mobile'].forEach(id => el(id).textContent = '— €');
+      ['out-tan','out-ncanoni','out-anticipo','out-riscatto','out-incasso','out-istruttoria','out-assicurazione']
+        .forEach(id => el(id).textContent = '–');
+      return;
+    }
+    if (importo > 500000){
+      warn.textContent = 'Per importi superiori a € 500.000 richiedere offerta ad hoc via mail.';
       warn.classList.add('show');
       ['out-rata','out-rata-mobile'].forEach(id => el(id).textContent = '— €');
       ['out-tan','out-ncanoni','out-anticipo','out-riscatto','out-incasso','out-istruttoria','out-assicurazione']
